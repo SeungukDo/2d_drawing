@@ -1,0 +1,28 @@
+CMAKE_MINIMUM_REQUIRED (VERSION 3.0.0)
+
+PROJECT ("2D Drawing")
+
+SET (OUTPUT_ELF "2d_drawing.out")
+
+SET (SRC_FILES "./main.cpp")
+
+SET (CMAKE_CXX_COMPILER "clang++")
+
+find_package(OpenGL REQUIRED)
+
+#freeglut 라이브러리 설정
+set(GLUT_LIBRARIES libglut.3.dylib)
+set(GLUT_INCLUDE_DIRS /usr/local/Cellar/freeglut/3.2.1_1/include)
+set(GLUT_LIBRARY_DIRS /usr/local/Cellar/freeglut/3.2.1_1/lib)
+
+#GLEW 라이브러리 설정
+set(GLEW_LIBRARIES libGLEW.dylib)
+set(GLEW_INCLUDE_DIRS /usr/local/Cellar/glew/2.2.0_1/include)
+set(GLEW_LIBRARY_DIRS /usr/local/Cellar/glew/2.2.0_1/lib)
+
+INCLUDE_DIRECTORIES ( ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
+ADD_COMPILE_OPTIONS ( "-g" )
+
+LINK_LIBRARIES( ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} ${GLEW_LIBRARIES})
+LINK_DIRECTORIES ( ${OPENGL_LIBRARY_DIRS} ${GLUT_LIBRARY_DIRS} ${GLEW_LIBRARY_DIRS})
+ADD_EXECUTABLE(${OUTPUT_ELF} ${SRC_FILES})
