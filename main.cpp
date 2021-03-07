@@ -3,26 +3,30 @@
 #include <vector>
 #include "units.h"
 
-UNITS:triangle player;
+Player player = Player();
 std::vector <rectangle> player_bullets;
 
 void init(void){
   glClearColor(0.0, 0.0, 0.0, 0.0);
   glShadeModel(GL_FLAT);
+  /*
   player.x = 0.01;
   player.y = 0.01;
   player.width = 0.15;
   player.height = 0.18;
-}
+  */
+}  
 
 void display (void) {
   glClear (GL_COLOR_BUFFER_BIT);
 
   glColor3f(1.0, 1.0, 1.0);
+
+  triangle player_shape = *player.get_shape();
   glBegin(GL_LINE_LOOP);
-    glVertex2f(player.x, player.y);
-    glVertex2f(player.x + player.width, player.y);
-    glVertex2f(player.x + player.width/2, player.y + player.height);
+    glVertex2f(player_shape.x, player_shape.y);
+    glVertex2f(player_shape.x + player_shape.width, player_shape.y);
+    glVertex2f(player_shape.x + player_shape.width/2, player_shape.y + player_shape.height);
   glEnd();
   for(int i = 0; i < player_bullets.size(); i++){
     rectangle bullet = player_bullets[i];
@@ -67,27 +71,30 @@ void rectangle_draw(){
 
 void shoot(){
   rectangle bullet;
+  triangle player_shape = *player.get_shape();
+
   bullet.width = 0.03;
   bullet.height = 0.03;
-  bullet.x = player.x + player.width/2 - bullet.width/2;
-  bullet.y = player.y + player.height;
+  bullet.x = player_shape.x + player_shape.width/2 - bullet.width/2;
+  bullet.y = player_shape.y + player_shape.height;
 
   player_bullets.push_back(bullet);
 }
 
 void keyboard(unsigned char key, int x, int y){
+
   switch (key) {
     case 'i':
-      player.y += 0.005;
+      player.move_up(0.01);
       break;
     case 'm':
-      player.y -= 0.005;
+      player.move_down(0.01);
       break;
     case 'k':
-      player.x += 0.005;
+      player.move_right(0.01);
       break;
     case 'j':
-      player.x -= 0.005;
+      player.move_left(0.01);
       break;
     case 32:  //space bar
       shoot();
@@ -96,19 +103,21 @@ void keyboard(unsigned char key, int x, int y){
   glutPostRedisplay();
 }
 
-void specialkeyboard(int key, int x, int y){
+void specialkeyboard(int key, int x, int y){ 
+  triangle player_shape = *player.get_shape();
+
   switch (key) {
     case GLUT_KEY_UP:
-      player.y += 0.005;
+      player.move_up(0.01);
       break;
     case GLUT_KEY_DOWN:
-      player.y -= 0.005;
+      player.move_down(0.01);
       break;
     case GLUT_KEY_RIGHT:
-      player.x += 0.005;
+      player.move_right(0.01);
       break;
     case GLUT_KEY_LEFT:
-      player.x -= 0.005;
+      player.move_left(0.01);
       break;
   }
   glutPostRedisplay();
