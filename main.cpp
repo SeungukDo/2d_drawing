@@ -1,22 +1,9 @@
 #include <GL/freeglut.h>
 #include <OpenGL/gl.h>
 #include <vector>
+#include "units.h"
 
-typedef struct triangle {
-  float x;
-  float y;
-  float width;
-  float height;
-} triangle;
-
- typedef struct rectangle {
-    float x;
-    float y;
-    float width;
-    float height;
-} rectangle;
-
-triangle player;
+UNITS:triangle player;
 std::vector <rectangle> player_bullets;
 
 void init(void){
