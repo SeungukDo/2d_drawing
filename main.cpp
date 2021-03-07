@@ -37,16 +37,15 @@ void display (void) {
     glVertex2f(player.x + player.width, player.y);
     glVertex2f(player.x + player.width/2, player.y + player.height);
   glEnd();
-    for(int i = 0; i < player_bullets.size(); i++){
-        rectangle bullet = player_bullets[i];
-        glBegin(GL_LINE_LOOP);
-          glVertex2f(bullet.x, bullet.y);
-          glVertex2f(bullet.x + bullet.width, bullet.y);
-          glVertex2f(bullet.x + bullet.width, bullet.y + bullet.height);
-          glVertex2f(bullet.x, bullet.y + bullet.height);
-        glEnd();
-    }
-
+  for(int i = 0; i < player_bullets.size(); i++){
+    rectangle bullet = player_bullets[i];
+    glBegin(GL_LINE_LOOP);
+      glVertex2f(bullet.x, bullet.y);
+      glVertex2f(bullet.x + bullet.width, bullet.y);
+      glVertex2f(bullet.x + bullet.width, bullet.y + bullet.height);
+      glVertex2f(bullet.x, bullet.y + bullet.height);
+    glEnd();
+  }
   glutSwapBuffers ();
 }
 
@@ -60,10 +59,10 @@ void reshape (int w, int h) {
 }
 
 void moveBullets(){
-    for(int i = 0; i < player_bullets.size(); i++){
-        player_bullets[i].y += 0.01;
-    }
-    glutPostRedisplay();
+  for(int i = 0; i < player_bullets.size(); i++){
+      player_bullets[i].y += 0.01;
+  }
+  glutPostRedisplay();
 }
 
 void rectangle_draw(){
