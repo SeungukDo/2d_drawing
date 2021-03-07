@@ -1,5 +1,7 @@
 #ifndef UNITS_H
 #define UNITS_H
+#define BULLET_WIDTH 0.03
+#define BULLET_HEIGHT 0.03
 
 typedef struct triangle {
   float x;
@@ -20,7 +22,6 @@ class Unit {
 
   protected:
     T shape; //defines shape of the unit. ex) width and height.
-    int hp; //구현바람
 
   public:
     T* get_shape() {return &shape;}; 
@@ -40,10 +41,7 @@ class Player: public Unit<triangle> {
         0.15, //width
         0.18, //height
       };
-
       shape = tmp;
-
-      hp = 3;
     };
 };
 
@@ -56,10 +54,20 @@ class Enemy: public Unit<triangle> {
         0.15, //width
         0.18, //height
       };
-
       shape = tmp;
+    };
+};
 
-      hp = 3;
+class Bullet: public Unit<rectangle> {
+  public:
+    Bullet(float _x, float _y) {
+      rectangle tmp = {
+        _x, //x
+        _y, //y
+        BULLET_WIDTH, //width
+        BULLET_HEIGHT, //height
+      };
+      shape = tmp;
     };
 };
 #endif
