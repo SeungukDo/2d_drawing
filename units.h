@@ -47,4 +47,19 @@ class Player: public Unit<triangle> {
     };
 };
 
+class Enemy: public Unit<triangle> {
+  public:
+    Enemy() {
+      triangle tmp = {
+        0.01, //x
+        0.9, //y
+        0.15, //width
+        0.18, //height
+      };
+
+      shape = tmp;
+
+      hp = 3;
+    };
+};
 #endif

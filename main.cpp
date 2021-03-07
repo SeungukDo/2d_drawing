@@ -4,6 +4,7 @@
 #include "units.h"
 
 Player player = Player();
+Enemy enemy = Enemy();
 std::vector <rectangle> player_bullets;
 
 void init(void){
@@ -23,11 +24,20 @@ void display (void) {
   glColor3f(1.0, 1.0, 1.0);
 
   triangle player_shape = *player.get_shape();
+  triangle enemy_shape = *enemy.get_shape();
+
   glBegin(GL_LINE_LOOP);
     glVertex2f(player_shape.x, player_shape.y);
     glVertex2f(player_shape.x + player_shape.width, player_shape.y);
     glVertex2f(player_shape.x + player_shape.width/2, player_shape.y + player_shape.height);
   glEnd();
+
+  glBegin(GL_LINE_LOOP);
+    glVertex2f(enemy_shape.x, enemy_shape.y);
+    glVertex2f(enemy_shape.x + enemy_shape.width, enemy_shape.y);
+    glVertex2f(enemy_shape.x + enemy_shape.width/2, enemy_shape.y - enemy_shape.height);
+  glEnd();
+
   for(int i = 0; i < player_bullets.size(); i++){
     rectangle bullet = player_bullets[i];
     glBegin(GL_LINE_LOOP);
