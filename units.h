@@ -43,6 +43,11 @@ class Player: public Unit<triangle> {
       };
       shape = tmp;
     };
+    int getHP() { return hp; }
+    void hit() { hp--; }
+
+  private:
+    int hp = 3; // health point of player
 };
 
 class Enemy: public Unit<triangle> {
@@ -56,6 +61,23 @@ class Enemy: public Unit<triangle> {
       };
       shape = tmp;
     };
+    int getHP() { return hp; }
+    int getRemain() { return remain; }
+    void new_hp() { hp = 6 - remain; }
+    void hit() { 
+        hp--;
+        if (hp == 0) {
+            remain--;
+            new_hp();
+        }
+    }
+    bool getDir() { return right; }
+    void changeDir() { right = !right; }
+
+  private:
+    int remain = 5; // remain number of enemies
+    int hp = 1; // health point of enemy
+    bool right = true;
 };
 
 class Bullet: public Unit<rectangle> {

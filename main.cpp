@@ -1,5 +1,5 @@
 #include <GL/freeglut.h>
-#include <OpenGL/gl.h>
+//#include <OpenGL/gl.h>
 #include <vector>
 #include "units.h"
 
@@ -7,6 +7,7 @@ Player player = Player();
 Enemy enemy = Enemy();
 std::vector <Bullet> player_bullets;
 std::vector <Bullet> enemy_bullets;
+int i = 0;
 
 void init(void){
   glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -28,14 +29,42 @@ void display (void) {
   triangle enemy_shape = *enemy.get_shape();
 
   //player
-  glBegin(GL_LINE_LOOP);   
+  glBegin(GL_TRIANGLES);
+    switch (player.getHP()) {
+    case 3:
+          glColor3f(0, 1.0, 0);
+        break;
+     case 2:
+         glColor3f(1.0, 1.0, 0);
+         break;
+      case 1:
+         glColor3f(1.0, 0, 0);
+        break;
+      }
     glVertex2f(player_shape.x, player_shape.y);
     glVertex2f(player_shape.x + player_shape.width, player_shape.y);
     glVertex2f(player_shape.x + player_shape.width/2, player_shape.y + player_shape.height);
   glEnd();
 
   //enemy
-  glBegin(GL_LINE_LOOP);  
+  glBegin(GL_TRIANGLES);
+    switch (enemy.getRemain()) {
+    case 5:
+        glColor3f(1.0, 0, 0);
+        break;
+     case 4:
+       glColor3f(1.0, 0.5, 0);
+        break;
+     case 3:
+       glColor3f(1.0, 1.0, 0);
+       break;
+     case 2:
+        glColor3f(0, 1.0, 0);
+        break;
+     case 1:
+        glColor3f(0, 0, 1.0);
+        break;
+     }
     glVertex2f(enemy_shape.x, enemy_shape.y);
     glVertex2f(enemy_shape.x + enemy_shape.width, enemy_shape.y);
     glVertex2f(enemy_shape.x + enemy_shape.width/2, enemy_shape.y - enemy_shape.height);
@@ -44,7 +73,18 @@ void display (void) {
   //player bullet
   for(int i = 0; i < player_bullets.size(); i++){ 
     rectangle bullet_shape = *player_bullets[i].get_shape();
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
+    switch (player.getHP()) {
+    case 3:
+        glColor3f(0, 1.0, 0);
+        break;
+    case 2:
+        glColor3f(1.0, 1.0, 0);
+        break;
+    case 1:
+        glColor3f(1.0, 0, 0);
+        break;
+    }
       glVertex2f(bullet_shape.x, bullet_shape.y);
       glVertex2f(bullet_shape.x + bullet_shape.width, bullet_shape.y);
       glVertex2f(bullet_shape.x + bullet_shape.width, bullet_shape.y + bullet_shape.height);
@@ -55,7 +95,24 @@ void display (void) {
   //enemy bullet
   for(int i = 0; i < enemy_bullets.size(); i++){ 
     rectangle bullet_shape = *enemy_bullets[i].get_shape();
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
+    switch (enemy.getRemain()) {
+    case 5:
+        glColor3f(1.0, 0, 0);
+        break;
+    case 4:
+        glColor3f(1.0, 0.5, 0);
+        break;
+    case 3:
+        glColor3f(1.0, 1.0, 0);
+        break;
+    case 2:
+        glColor3f(0, 1.0, 0);
+        break;
+    case 1:
+        glColor3f(0, 0, 1.0);
+        break;
+    }
       glVertex2f(bullet_shape.x, bullet_shape.y);
       glVertex2f(bullet_shape.x + bullet_shape.width, bullet_shape.y);
       glVertex2f(bullet_shape.x + bullet_shape.width, bullet_shape.y + bullet_shape.height);
@@ -78,6 +135,17 @@ void reshape (int w, int h) {
 void move_player_bullets(){
   for(int i = 0; i < player_bullets.size(); i++){
       player_bullets[i].move_up(0.01);
+
+      rectangle bullet_shape = *player_bullets[i].get_shape();
+      triangle enemy_shape = *enemy.get_shape();
+
+      if ((bullet_shape.x < enemy_shape.x + enemy_shape.width) &&
+          (bullet_shape.x > enemy_shape.x) &&
+          (bullet_shape.y < enemy_shape.y) &&
+          (bullet_shape.y > enemy_shape.y - enemy_shape.height)) {
+          enemy.hit();
+          player_bullets.erase(player_bullets.begin() + i);
+      }
   }
   glutPostRedisplay();
 }
@@ -85,6 +153,17 @@ void move_player_bullets(){
 void move_enemy_bullets(){
   for(int i = 0; i < enemy_bullets.size(); i++){
       enemy_bullets[i].move_down(0.01);
+
+      rectangle bullet_shape = *enemy_bullets[i].get_shape();
+      triangle player_shape = *player.get_shape();
+
+      if ((bullet_shape.x < player_shape.x + player_shape.width) &&
+          (bullet_shape.x > player_shape.x) &&
+          (bullet_shape.y > player_shape.y) &&
+          (bullet_shape.y < player_shape.y + player_shape.height)) {
+          player.hit();
+          enemy_bullets.erase(enemy_bullets.begin() + i);
+      }
   }
   glutPostRedisplay();
 }
@@ -103,12 +182,39 @@ void player_shoot(){
 void enemy_shoot(){
   triangle enemy_shape = *enemy.get_shape();
 
-  float x = enemy_shape.x + enemy_shape.width/2 - BULLET_WIDTH/2;
+  float x = enemy_shape.x + enemy_shape.width / 2 - BULLET_WIDTH / 2;
   float y = enemy_shape.y - enemy_shape.height;
 
   Bullet bullet = Bullet(x, y);
 
   enemy_bullets.push_back(bullet);
+}
+
+void enemy_move() {
+    triangle enemy_shape = *enemy.get_shape();
+
+    switch (enemy.getRemain()) {
+    case 5:
+        if (enemy_shape.x > 0.8 || enemy_shape.x < 0) {
+            enemy.changeDir();
+        }
+        break;
+    case 4:
+        break;
+    case 3:
+        break;
+    case 2:
+        break;
+    case 1:
+        break;
+    }
+
+    if (enemy.getDir()) {
+        enemy.move_right(0.001);
+    }
+    else {
+        enemy.move_left(0.001);
+    }
 }
 
 void keyboard(unsigned char key, int x, int y){
@@ -130,7 +236,7 @@ void keyboard(unsigned char key, int x, int y){
       player_shoot();
       break;
     case 'a':  
-      enemy_shoot();
+      //enemy_shoot();
       break;
   }
   glutPostRedisplay();
@@ -157,8 +263,15 @@ void specialkeyboard(int key, int x, int y){
 }
 
 void idle_func() {
+  enemy_move();
+  //enemy_shoot();
   move_enemy_bullets();
   move_player_bullets();
+}
+
+void timer_func(int a) {
+    enemy_shoot();
+    glutTimerFunc(500, timer_func, 1);
 }
 
 int main (int argc, char **argv) {
@@ -175,6 +288,7 @@ int main (int argc, char **argv) {
   glutKeyboardFunc(keyboard);
   glutSpecialFunc(specialkeyboard);
   glutIdleFunc(idle_func);
+  glutTimerFunc(500, timer_func, 1);            // Enemy shoots every 500ms
   glutMainLoop();
   return 0;
 }
