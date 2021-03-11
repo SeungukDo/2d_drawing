@@ -7,13 +7,13 @@
 #include <vector>
 
 typedef struct triangle {
-  float x;
-  float y;
-  float width;
-  float height;
+    float x;
+    float y;
+    float width;
+    float height;
 } triangle;
 
- typedef struct rectangle {
+typedef struct rectangle {
     float x;
     float y;
     float width;
@@ -21,97 +21,172 @@ typedef struct triangle {
 } rectangle;
 
 enum Direction {
-  UP,
-  DOWN,
-  RIGHT,
-  LEFT
+    UP,
+    DOWN,
+    RIGHT,
+    LEFT
 };
 
 template <typename T> //triangle, rectangle?
 class Object {
 
-  protected:
+protected:
     T shape; //defines shape of the unit. ex) width and height.
 
-  public:
-    T* get_shape() {return &shape;}; 
-    float move_up(float d) { if (shape.y + d < 1) shape.y += d; return shape.y; }; 
+public:
+    T* get_shape() { return &shape; };
+    float move_up(float d) { if (shape.y + d < 1) shape.y += d; return shape.y; };
     float move_down(float d) { if (shape.y - d > 0) shape.y -= d; return shape.y; };
     float move_right(float d) { if (shape.x + d < 1) shape.x += d; return shape.x; };
     float move_left(float d) { if (shape.x - d > 0) shape.x -= d; return shape.x; };
 };
 
-class Player: public Object<triangle> {
-  public:
+class Player : public Object<triangle> {
+public:
     Player() {
-      triangle tmp = {
-        0.5 - PLAYER_WIDTH/2, //x
-        0.02, //y
-        PLAYER_WIDTH, //width
-        PLAYER_HEIGHT, //height
-      };
-      shape = tmp;
+        triangle tmp = {
+          0.5 - PLAYER_WIDTH / 2, //x
+          0.02, //y
+          PLAYER_WIDTH, //width
+          PLAYER_HEIGHT, //height
+        };
+        shape = tmp;
     };
+    int getHP() { return hp; }
+    void hit() { hp--; }
+
+private:
+    int hp = 3; // health point of player
 };
 
-class Enemy: public Object<triangle> {
-  public:
-    Enemy() {
-      triangle tmp = {
-        0.5 - PLAYER_WIDTH/2, //x
-        0.7, //y
-        0.15, //width
-        0.18, //height
-      };
-      shape = tmp;
+class Enemy : public Object<triangle> {
+public:
+    Enemy(int hp_) {
+        triangle tmp = {
+          0.5 - PLAYER_WIDTH / 2, //x
+          0.7, //y
+          0.15, //width
+          -0.18, //height
+        };
+        shape = tmp;
+        hp = hp_;
     };
+    int getHP() { return hp; }
+    bool hit() {
+        hp--;
+        if (hp <= 0) return false;
+    }
+
+private:
+    int hp; // health point of enemy
 };
 
-class Bullet: public Object<rectangle> {
-  public:
+class EnemyList {
+private:
+    std::vector <Enemy> enemy_vector;
+    int num;
+
+public:
+    EnemyList() {
+        num = 0;
+        for (int i = 0; i < 5; i++) {
+            enemy_vector.push_back(Enemy(i + 1));
+        }
+    }
+
+    Enemy getEnemy() { return enemy_vector[num]; }
+
+    int getNum() { return num; }
+
+    void hit() {
+        if (!enemy_vector[num].hit()) {
+            num++;
+        }
+
+        if (num == 5) {
+            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Game Win
+        }
+    }
+};
+
+class Bullet : public Object<rectangle> {
+public:
     Bullet(float _x, float _y) {
-      rectangle tmp = {
-        _x, //x
-        _y, //y
-        BULLET_WIDTH, //width
-        BULLET_HEIGHT, //height
-      };
-      shape = tmp;
+        rectangle tmp = {
+          _x, //x
+          _y, //y
+          BULLET_WIDTH, //width
+          BULLET_HEIGHT, //height
+        };
+        shape = tmp;
     };
 };
 
 extern Player player;
-extern Enemy enemy;
+extern EnemyList enemy_list;
 
 class BulletList {
-  private:
+private:
     std::vector <Bullet> bullet_list;
 
-  public:
-    void shoot() {
-      triangle player_shape = *player.get_shape();
+public:
+    void shoot(bool isPlayer) {
+        triangle shape;
 
-      float x = player_shape.x + player_shape.width/2 - BULLET_WIDTH/2;
-      float y = player_shape.y + player_shape.height;
+        if (isPlayer)
+            shape = *player.get_shape();
+        else
+            shape = *enemy_list.getEnemy().get_shape();
 
-      Bullet bullet = Bullet(x, y);
+        float x = shape.x + shape.width / 2 - BULLET_WIDTH / 2;
+        float y = shape.y + shape.height;
 
-      bullet_list.push_back(bullet);
+        Bullet bullet = Bullet(x, y);
+
+        bullet_list.push_back(bullet);
     }
 
     void move_bullets(Direction d) {
-      for (int i = 0; i < bullet_list.size(); i++) {
-        if (d == UP) bullet_list[i].move_up(0.01);
-        else if (d == DOWN) bullet_list[i].move_down(0.01);
-      }
+        for (int i = 0; i < bullet_list.size(); i++) {
+            if (d == UP) {
+                bullet_list[i].move_up(0.01); 
+
+                triangle enemy_shape = *enemy_list.getEnemy().get_shape();
+                rectangle bullet_shape = *bullet_list[i].get_shape();
+                if ((bullet_shape.x < enemy_shape.x + enemy_shape.width) &&     // hit box... need to be replaced
+                    (bullet_shape.x > enemy_shape.x) &&
+                    (bullet_shape.y < enemy_shape.y) &&
+                    (bullet_shape.y > enemy_shape.y + enemy_shape.height)) {
+                    enemy_list.hit();
+                    bullet_list.erase(bullet_list.begin() + i);
+                }
+            }
+            else if (d == DOWN) { 
+                bullet_list[i].move_down(0.01); 
+
+                rectangle bullet_shape = *bullet_list[i].get_shape();
+                triangle player_shape = *player.get_shape();
+                if ((bullet_shape.x < player_shape.x + player_shape.width) &&     // hit box... need to be replaced
+                    (bullet_shape.x > player_shape.x) &&
+                    (bullet_shape.y > player_shape.y) &&
+                    (bullet_shape.y < player_shape.y + player_shape.height)) {
+                    player.hit();
+                    bullet_list.erase(bullet_list.begin() + i);
+                }
+            }
+        }
     }
 
     std::vector <rectangle> get_bullet_shapes() {
-      std::vector <rectangle> shapes;
-      for (int i = 0; i < bullet_list.size(); i++) {
-        shapes.push_back(*bullet_list[i].get_shape());
-      }
-      return shapes;
+        std::vector <rectangle> shapes;
+        for (int i = 0; i < bullet_list.size(); i++) {
+            shapes.push_back(*bullet_list[i].get_shape());
+        }
+        return shapes;
+    }
+
+    bool isHit(rectangle bullet_shape, triangle try_shape) {
+
     }
 };
 
