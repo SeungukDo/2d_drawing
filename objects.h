@@ -92,11 +92,13 @@ class EnemyList {
 private:
     std::vector <Enemy> enemy_list;
     int index;
+    int total_num;
 
 public:
     EnemyList() {
         index = 0;
-        for (int i = 0; i < 5; i++) {
+        total_num = 5;
+        for (int i = 0; i < total_num; i++) {
             enemy_list.push_back(Enemy(i + 1));
         }
     }
@@ -110,7 +112,7 @@ public:
             index++;
         }
 
-        if (index == 5) {
+        if (index == total_num) {
             // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Game Win
         }
     }
