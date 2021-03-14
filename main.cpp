@@ -49,7 +49,7 @@ void display(void) {
 
     //enemy
     glBegin(GL_TRIANGLES);
-    switch (enemy_list.getNum()) {
+    switch (enemy_list.getIndex()) {
     case 0:
         glColor3f(1.0, 0, 0);
         break;
@@ -99,7 +99,7 @@ void display(void) {
     for (int i = 0; i < enemy_bullet_shapes.size(); i++) {
         rectangle bullet_shape = enemy_bullet_shapes[i];
         glBegin(GL_QUADS);
-        switch (enemy_list.getNum()) {
+        switch (enemy_list.getIndex()) {
         case 0:
             glColor3f(1.0, 0, 0);
             break;

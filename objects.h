@@ -90,27 +90,27 @@ private:
 
 class EnemyList {
 private:
-    std::vector <Enemy> enemy_vector;
-    int num;
+    std::vector <Enemy> enemy_list;
+    int index;
 
 public:
     EnemyList() {
-        num = 0;
+        index = 0;
         for (int i = 0; i < 5; i++) {
-            enemy_vector.push_back(Enemy(i + 1));
+            enemy_list.push_back(Enemy(i + 1));
         }
     }
 
-    Enemy getEnemy() { return enemy_vector[num]; }
+    Enemy getEnemy() { return enemy_list[index]; }
 
-    int getNum() { return num; }
+    int getIndex() { return index; }
 
     void hit() {
-        if (enemy_vector[num].hit() == false) {
-            num++;
+        if (enemy_list[index].hit() == false) {
+            index++;
         }
 
-        if (num == 5) {
+        if (index == 5) {
             // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Game Win
         }
     }
