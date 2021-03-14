@@ -53,5 +53,5 @@ class를 이용해 게임 내 물체들을 나타내었다.
 - ***bullet_list***: bullet들의 vector
 #### Interface
 - ***shoot***: bullet_list에 bullet object를 하나 만들어서 추가. 플레이어의 bullet인지에 대한 여부를 인자로 받아, player 혹은 enemy의 위치를 받아온다. 이를 바탕으로 bullet object를 생성하여 bullet_list에 추가한다.
-- ***move_bullets***: direction을 인자로 받아, 해당하는 방향으로 bullet_list의 모든 bullet을 이동시킨다.
-- ***get_bullet_shapes***: 
+- ***move_bullets***: direction을 인자로 받아, 해당하는 방향으로 bullet_list의 모든 bullet을 이동시킨다. 만약 적 혹은 플레이어의 boundary 안에 총알이 위치할 경우, enemy_list.hit 혹은 player.hit을 호출한다.
+- ***get_bullet_shapes***: 모든 bullet의 shape를 vector에 저장한 후, return한다.
