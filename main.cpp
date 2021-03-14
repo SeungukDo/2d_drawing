@@ -2,11 +2,13 @@
 //#include <OpenGL/gl.h>
 #include <vector>
 #include "objects.h"
+#include "mode.h"
 
 Player player = Player();
 EnemyList enemy_list = EnemyList();
 BulletList player_bullets;
 BulletList enemy_bullets;
+Gamemode mode = NORMAL;
 
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -148,6 +150,14 @@ void keyboard(unsigned char key, int x, int y) {
     case 'j':
         player.move_left(0.01);
         break;
+    case 'c':
+        if (mode == ALLPASS) mode = NORMAL;
+        else mode = ALLPASS;
+        break;
+    case 'f':
+        if (mode == ALLFAIL) mode = NORMAL;
+        else mode = ALLFAIL;
+        break; 
     case 32:  //space bar
         player_bullets.shoot(true);
         break;

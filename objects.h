@@ -5,6 +5,7 @@
 #define BULLET_WIDTH 0.03
 #define BULLET_HEIGHT 0.03
 #include <vector>
+#include "mode.h"
 
 typedef struct triangle {
     float x;
@@ -53,7 +54,11 @@ public:
         shape = tmp;
     };
     int getHP() { return hp; }
-    void hit() { hp--; }
+    void hit() { 
+        if (mode == ALLFAIL) hp = 0; 
+        else if (mode == ALLPASS) ;
+        else hp--;
+}
 
 private:
     int hp = 3; // health point of player
@@ -73,7 +78,8 @@ public:
     };
     int getHP() { return hp; }
     bool hit() {
-        hp--;
+        if (mode == ALLPASS) hp = 0;
+        else hp--;
         if (hp <= 0) return false;
         else return true;
     }
@@ -144,7 +150,8 @@ public:
 
         Bullet bullet = Bullet(x, y);
 
-        bullet_list.push_back(bullet);
+        if (isPlayer == false || mode != ALLFAIL)
+            bullet_list.push_back(bullet);
     }
 
     void move_bullets(Direction d) {
