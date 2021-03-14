@@ -75,6 +75,7 @@ public:
     bool hit() {
         hp--;
         if (hp <= 0) return false;
+        else return true;
     }
 
 private:
@@ -99,7 +100,7 @@ public:
     int getNum() { return num; }
 
     void hit() {
-        if (!enemy_vector[num].hit()) {
+        if (enemy_vector[num].hit() == false) {
             num++;
         }
 
