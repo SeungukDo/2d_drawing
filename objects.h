@@ -107,6 +107,8 @@ public:
             else if (shape.x < 0.2 - PLAYER_WIDTH) isRight = true;
             break;
         case 4:
+            if (shape.x > 0.8) isRight = false;
+            else if (shape.x < 0.2 - PLAYER_WIDTH) isRight = true;
             break;
         }
 
@@ -178,61 +180,41 @@ private:
 public:
     void shoot(bool isPlayer) {
         triangle shape;
+        float x, y;
 
-        if (isPlayer)
+        if (isPlayer) {
             shape = *player.get_shape();
-        else
+            x = shape.x + PLAYER_WIDTH / 2 - BULLET_WIDTH / 2;
+            y = shape.y + PLAYER_HEIGHT;
+        }
+        else {
             shape = *enemy_list.getEnemy().get_shape();
-
-        float x = shape.x + shape.width / 2 - BULLET_WIDTH / 2;
-        float y = shape.y + shape.height;
-
-        Bullet bullet = Bullet(x, y);
+            x = shape.x + PLAYER_WIDTH / 2 + BULLET_WIDTH / 2;
+            y = shape.y - PLAYER_HEIGHT;
+        }
 
         if (isPlayer == false || mode != ALLFAIL)
-            bullet_list.push_back(bullet);
+            bullet_list.push_back(Bullet(x, y));
     }
 
     void move_bullets(Direction d) {
         for (int i = 0; i < bullet_list.size(); i++) {
             if (d == UP) {
                 bullet_list[i].move_up(0.01);
-
                 triangle enemy_shape = *enemy_list.getEnemy().get_shape();
                 rectangle bullet_shape = *bullet_list[i].get_shape();
-                if (((bullet_shape.x > enemy_shape.x + PLAYER_WIDTH / 5) &&
-                        (bullet_shape.x < enemy_shape.x + 2 * PLAYER_WIDTH / 5) &&
-                        (bullet_shape.y < enemy_shape.y) &&
-                        (bullet_shape.y > enemy_shape.y - 2 * PLAYER_HEIGHT / 5)) ||
-                    ((bullet_shape.x > enemy_shape.x + 3 * PLAYER_WIDTH / 5) &&
-                        (bullet_shape.x < enemy_shape.x + 4 * PLAYER_WIDTH / 5) &&
-                        (bullet_shape.y < enemy_shape.y) &&
-                        (bullet_shape.y > enemy_shape.y - 2 * PLAYER_HEIGHT / 5)) ||
-                    ((bullet_shape.x > enemy_shape.x + 2 * PLAYER_WIDTH / 5) &&
-                        (bullet_shape.x < enemy_shape.x + 3 * PLAYER_WIDTH / 5) &&
-                        (bullet_shape.y < enemy_shape.y) &&
-                        (bullet_shape.y > enemy_shape.y - 4 * PLAYER_HEIGHT / 5))) {
+
+                if (isHit(bullet_shape.x, bullet_shape.y, enemy_shape.x, enemy_shape.y, true)) {
                     enemy_list.hit();
                     bullet_list.erase(bullet_list.begin() + i);
                 }
             }
             else if (d == DOWN) {
                 bullet_list[i].move_down(0.01);
-
                 rectangle bullet_shape = *bullet_list[i].get_shape();
                 triangle player_shape = *player.get_shape();
-                if (((bullet_shape.x > player_shape.x + PLAYER_WIDTH / 5) &&
-                    (bullet_shape.x < player_shape.x + 2 * PLAYER_WIDTH / 5) &&
-                    (bullet_shape.y > player_shape.y) &&
-                    (bullet_shape.y < player_shape.y + 2 * PLAYER_HEIGHT / 5)) ||
-                    ((bullet_shape.x > player_shape.x + 3 * PLAYER_WIDTH / 5) &&
-                        (bullet_shape.x < player_shape.x + 4 * PLAYER_WIDTH / 5) &&
-                        (bullet_shape.y > player_shape.y) &&
-                        (bullet_shape.y < player_shape.y + 2 * PLAYER_HEIGHT / 5)) ||
-                    ((bullet_shape.x > player_shape.x + 2 * PLAYER_WIDTH / 5) &&
-                        (bullet_shape.x < player_shape.x + 3 * PLAYER_WIDTH / 5) &&
-                        (bullet_shape.y > player_shape.y) &&
-                        (bullet_shape.y < player_shape.y + 4 * PLAYER_HEIGHT / 5))) {
+
+                if (isHit(bullet_shape.x, bullet_shape.y, player_shape.x, player_shape.y, false)) {
                     player.hit();
                     bullet_list.erase(bullet_list.begin() + i);
                 }
@@ -248,8 +230,18 @@ public:
         return shapes;
     }
 
-    bool isHit(rectangle bullet_shape, triangle try_shape) {
+    bool isHit(float bx, float by, float tx, float ty, bool isPlayer) {
+        int i = -1;
+        if (isPlayer) i = 1;
 
+        return (((bx + i * BULLET_WIDTH / 2 > tx + PLAYER_WIDTH / 10) &&
+                    (bx + i * BULLET_WIDTH / 2 < tx + 9 * PLAYER_WIDTH / 10) &&
+                    (i * by + BULLET_HEIGHT / 2 < i * ty) &&
+                    (i * by + BULLET_HEIGHT / 2 > i * ty - PLAYER_HEIGHT / 10)) ||
+                ((bx + i * BULLET_WIDTH / 2 > tx + 2 * PLAYER_WIDTH / 5) &&
+                   (bx + i * BULLET_WIDTH / 2 < tx + 3 * PLAYER_WIDTH / 5) &&
+                   (i * by + BULLET_HEIGHT / 2 < i * ty - PLAYER_HEIGHT / 10) &&
+                   (i * by + BULLET_HEIGHT / 2 > i * ty - 4 * PLAYER_HEIGHT / 5)));
     }
 };
 
