@@ -91,36 +91,38 @@ public:
         else return true;
     }
     void move(int idx) {
-        switch (idx) {
-        case 0:
+        if (idx == 0) {
             if (shape.x > 0.8) isRight = false;
             else if (shape.x < 0.2 - PLAYER_WIDTH) isRight = true;
-            break;
-        case 1:
-            if (shape.x > 0.8) isRight = false;
-            else if (shape.x < 0.2 - PLAYER_WIDTH) isRight = true;
-            break;
-        case 2:
-            break;
-        case 3:
-            if (shape.x > 0.8) isRight = false;
-            else if (shape.x < 0.2 - PLAYER_WIDTH) isRight = true;
-            break;
-        case 4:
-            if (shape.x > 0.8) isRight = false;
-            else if (shape.x < 0.2 - PLAYER_WIDTH) isRight = true;
-            break;
         }
 
         if (isRight) move_right(0.001);
         else move_left(0.001);
     }
-    void move_2() {
+    void move_2(int idx) {
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<int> dis(0, 3);
-        if (dis(gen) == 0 || dis(gen) == 2) isRight = true;
-        else if (dis(gen) == 1 || dis(gen) == 3) isRight = false;
+        std::uniform_int_distribution<int> dis(0, 999);
+        int k = dis(gen);
+
+        switch (idx) {
+        case 1:
+            if (k % 2 == 0) isRight = false;
+            else if (k % 2 == 1) isRight = true;
+            break;
+        case 2:
+            if (k % 3 == 1) isRight = false;
+            else if (k % 3 == 0 || k % 3 == 2) isRight = true;
+            break;
+        case 3:
+            if (k % 3 == 0 || k % 3 == 2) isRight = false;
+            else if (k % 3 == 1) isRight = true;
+            break;
+        case 4:
+            if (k % 2 == 0) isRight = true;
+            else if (k % 2 == 1) isRight = false;
+            break;
+        }
     }
 
 private:
@@ -145,7 +147,7 @@ public:
     Enemy getEnemy() { return enemy_list[index]; }
     int getIndex() { return index; }
     void move() { enemy_list[index].move(index); }
-    void move_2() { enemy_list[index].move_2(); }
+    void move_2() { enemy_list[index].move_2(index); }
     void hit() {
         if (enemy_list[index].hit() == false) {
             if (index + 1 == total_num) {
@@ -201,6 +203,11 @@ public:
         for (int i = 0; i < bullet_list.size(); i++) {
             if (d == UP) {
                 bullet_list[i].move_up(0.01);
+                if (bullet_list[i].get_shape()->y + 0.01 >= 0.98) {
+                    bullet_list.erase(bullet_list.begin() + i);
+                    return;
+                }
+
                 triangle enemy_shape = *enemy_list.getEnemy().get_shape();
                 rectangle bullet_shape = *bullet_list[i].get_shape();
 
@@ -211,6 +218,10 @@ public:
             }
             else if (d == DOWN) {
                 bullet_list[i].move_down(0.01);
+                if (bullet_list[i].get_shape()->y - 0.01 <= 0) {
+                    bullet_list.erase(bullet_list.begin() + i);
+                    return;
+                }
                 rectangle bullet_shape = *bullet_list[i].get_shape();
                 triangle player_shape = *player.get_shape();
 
@@ -235,13 +246,13 @@ public:
         if (isPlayer) i = 1;
 
         return (((bx + i * BULLET_WIDTH / 2 > tx + PLAYER_WIDTH / 10) &&
-                    (bx + i * BULLET_WIDTH / 2 < tx + 9 * PLAYER_WIDTH / 10) &&
-                    (i * by + BULLET_HEIGHT / 2 < i * ty) &&
-                    (i * by + BULLET_HEIGHT / 2 > i * ty - PLAYER_HEIGHT / 10)) ||
-                ((bx + i * BULLET_WIDTH / 2 > tx + 2 * PLAYER_WIDTH / 5) &&
-                   (bx + i * BULLET_WIDTH / 2 < tx + 3 * PLAYER_WIDTH / 5) &&
-                   (i * by + BULLET_HEIGHT / 2 < i * ty - PLAYER_HEIGHT / 10) &&
-                   (i * by + BULLET_HEIGHT / 2 > i * ty - 4 * PLAYER_HEIGHT / 5)));
+            (bx + i * BULLET_WIDTH / 2 < tx + 9 * PLAYER_WIDTH / 10) &&
+            (i * by + BULLET_HEIGHT / 2 < i * ty) &&
+            (i * by + BULLET_HEIGHT / 2 > i * ty - PLAYER_HEIGHT / 10)) ||
+            ((bx + i * BULLET_WIDTH / 2 > tx + 2 * PLAYER_WIDTH / 5) &&
+                (bx + i * BULLET_WIDTH / 2 < tx + 3 * PLAYER_WIDTH / 5) &&
+                (i * by + BULLET_HEIGHT / 2 < i * ty - PLAYER_HEIGHT / 10) &&
+                (i * by + BULLET_HEIGHT / 2 > i * ty - 4 * PLAYER_HEIGHT / 5)));
     }
 };
 

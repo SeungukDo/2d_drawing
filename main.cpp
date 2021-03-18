@@ -24,18 +24,18 @@ void init(void) {
 
 void drawTri() {
     glBegin(GL_TRIANGLES);
-        glVertex2f(0, 0);
-        glVertex2f(PLAYER_WIDTH, 0);
-        glVertex2f(PLAYER_WIDTH / 2, PLAYER_HEIGHT);
+    glVertex2f(0, 0);
+    glVertex2f(PLAYER_WIDTH, 0);
+    glVertex2f(PLAYER_WIDTH / 2, PLAYER_HEIGHT);
     glEnd();
 }
 
 void drawRect() {
     glBegin(GL_QUADS);
-        glVertex2f(0, 0);
-        glVertex2f(BULLET_WIDTH, 0);
-        glVertex2f(BULLET_WIDTH, BULLET_HEIGHT);
-        glVertex2f(0, BULLET_HEIGHT);
+    glVertex2f(0, 0);
+    glVertex2f(BULLET_WIDTH, 0);
+    glVertex2f(BULLET_WIDTH, BULLET_HEIGHT);
+    glVertex2f(0, BULLET_HEIGHT);
     glEnd();
 }
 
@@ -116,68 +116,68 @@ void display(void) {
         glLoadIdentity();
         glColor3f(1.0, 1.0, 1.0);
         glBegin(GL_LINE_STRIP);             // W
-            glVertex2f(0.3, 0.6);
-            glVertex2f(0.325, 0.5);
-            glVertex2f(0.35, 0.6);
-            glVertex2f(0.375, 0.5);
-            glVertex2f(0.4, 0.6);
+        glVertex2f(0.3, 0.6);
+        glVertex2f(0.325, 0.5);
+        glVertex2f(0.35, 0.6);
+        glVertex2f(0.375, 0.5);
+        glVertex2f(0.4, 0.6);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // I
-            glVertex2f(0.5, 0.6);
-            glVertex2f(0.5, 0.5);
+        glVertex2f(0.5, 0.6);
+        glVertex2f(0.5, 0.5);
         glEnd();
         glBegin(GL_LINE_STRIP);
-            glVertex2f(0.475, 0.6);
-            glVertex2f(0.525, 0.6);
+        glVertex2f(0.475, 0.6);
+        glVertex2f(0.525, 0.6);
         glEnd();
         glBegin(GL_LINE_STRIP);
-            glVertex2f(0.475, 0.5);
-            glVertex2f(0.525, 0.5);
+        glVertex2f(0.475, 0.5);
+        glVertex2f(0.525, 0.5);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // N
-            glVertex2f(0.6, 0.5);
-            glVertex2f(0.6, 0.6);
-            glVertex2f(0.675, 0.5);
-            glVertex2f(0.675, 0.6);
+        glVertex2f(0.6, 0.5);
+        glVertex2f(0.6, 0.6);
+        glVertex2f(0.675, 0.5);
+        glVertex2f(0.675, 0.6);
         glEnd();
         break;
     case 2:
         glLoadIdentity();
         glColor3f(1.0, 1.0, 1.0);
         glBegin(GL_LINE_STRIP);             // L
-            glVertex2f(0.25, 0.6);
-            glVertex2f(0.25, 0.5);
-            glVertex2f(0.325, 0.5);
+        glVertex2f(0.25, 0.6);
+        glVertex2f(0.25, 0.5);
+        glVertex2f(0.325, 0.5);
         glEnd();
-           
+
         glBegin(GL_LINE_LOOP);              // O
-            glVertex2f(0.4, 0.6);
-            glVertex2f(0.4, 0.5);
-            glVertex2f(0.475, 0.5);
-            glVertex2f(0.475, 0.6);
+        glVertex2f(0.4, 0.6);
+        glVertex2f(0.4, 0.5);
+        glVertex2f(0.475, 0.5);
+        glVertex2f(0.475, 0.6);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // S
-            glVertex2f(0.625, 0.6);
-            glVertex2f(0.55, 0.6);
-            glVertex2f(0.55, 0.55);
-            glVertex2f(0.625, 0.55);
-            glVertex2f(0.625, 0.5);
-            glVertex2f(0.55, 0.5);
+        glVertex2f(0.625, 0.6);
+        glVertex2f(0.55, 0.6);
+        glVertex2f(0.55, 0.55);
+        glVertex2f(0.625, 0.55);
+        glVertex2f(0.625, 0.5);
+        glVertex2f(0.55, 0.5);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // E
-            glVertex2f(0.775, 0.6);
-            glVertex2f(0.7, 0.6);
-            glVertex2f(0.7, 0.5);
-            glVertex2f(0.775, 0.5);
+        glVertex2f(0.775, 0.6);
+        glVertex2f(0.7, 0.6);
+        glVertex2f(0.7, 0.5);
+        glVertex2f(0.775, 0.5);
         glEnd();
 
         glBegin(GL_LINES);
-            glVertex2f(0.7, 0.55);
-            glVertex2f(0.775, 0.55);
+        glVertex2f(0.7, 0.55);
+        glVertex2f(0.775, 0.55);
         glEnd();
         break;
     }
@@ -257,7 +257,7 @@ void idle_func() {
 
 void timer_func(int a) {
     enemy_bullets.shoot(false);
-    if (enemy_list.getIndex() == 2) { enemy_list.move_2(); }
+    if (enemy_list.getIndex() != 0) { enemy_list.move_2(); }
 
     glutTimerFunc(500, timer_func, 1);
 }
