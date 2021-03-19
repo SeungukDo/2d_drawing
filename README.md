@@ -1,7 +1,11 @@
 # 2d_drawing
 postech graphics assignment#1
 
-## 1. Data Structure
+## 1. Introduction
+
+## 2. 실행 방법
+
+## 2. Data Structure
 class를 이용해 게임 내 물체들을 나타내었다. 
 이때 각각의 물체를 나타내는 class들은 모두 하나의 클래스(Object)으로 부터 inherit한 class이다.
 
