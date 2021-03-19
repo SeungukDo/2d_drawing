@@ -1,5 +1,6 @@
 *.out
 CMakeFiles/
+CMake
 Makefile
 CMakeCache.txt
 *.cmake
