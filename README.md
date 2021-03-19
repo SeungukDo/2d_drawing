@@ -1,7 +1,11 @@
 # 2d_drawing
 postech graphics assignment#1
 
-## 1. Data Structure
+## 1. Introduction
+
+## 2. 실행방법
+
+## 3. Data Structure
 class를 이용해 게임 내 유닛들을 나타내었다. 
 이때 각각의 유닛을 나타내는 class들은 모두 하나의 클래스(Unit)으로 부터 inherit한 class이다.
 
