@@ -3,7 +3,7 @@ postech graphics assignment#1
 
 OpenGL을 이용하여 구현한 간단한 탄막 슈팅 게임. 고전적인 2d 슈팅 게임과 룰을 동일시 한다. 내가 총알을 맞으면 체력이 깎이고, 적이 총알을 맞으면 체력이 깎이고 다른 새로운 적이 나오는 시스템이다.
 
-<img src=".images/playing_scene.png">
+<img src=".images/playing_scene.png" width="300" height="300">
 
 ## 1. Environment
 clang 12.0.0 (or Visual Studio 2019)
