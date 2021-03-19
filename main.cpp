@@ -217,9 +217,6 @@ void keyboard(unsigned char key, int x, int y) {
         if (mode == ALLFAIL) mode = NORMAL;
         else mode = ALLFAIL;
         break;
-    case 'p':
-        enemy_bullets.shoot(false);
-        break;
     case 32:  //space bar
         player_bullets.shoot(true);
         break;
