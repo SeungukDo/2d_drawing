@@ -49,8 +49,8 @@ class Player : public Object<triangle> {
 public:
     Player() {
         triangle tmp = {
-          0.5 - PLAYER_WIDTH / 2, //x
-          0.02, //y
+          0.5, //x
+          0.15, //y
           PLAYER_WIDTH, //width
           PLAYER_HEIGHT, //height
         };
@@ -75,8 +75,8 @@ class Enemy : public Object<triangle> {
 public:
     Enemy(int hp_) {
         triangle tmp = {
-          0.5 - PLAYER_WIDTH / 2, //x
-          0.98, //y
+          0.5, //x
+          0.85, //y
           PLAYER_WIDTH, //width
           -PLAYER_HEIGHT, //height
         };

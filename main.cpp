@@ -3,12 +3,18 @@
 #include <vector>
 #include "objects.h"
 #include "mode.h"
+#include "graph.h"
 
 Player player = Player();
 EnemyList enemy_list = EnemyList();
 BulletList player_bullets;
 BulletList enemy_bullets;
 Gamemode mode = NORMAL;
+float planet[5] = { 0.3f, 0.3f, 0.1f, 0.1f, 0.0f };
+float planet2[5] = { 0.8f, 0.9f, 0.05f, 0.05f, 0.0f };
+
+float plane[3] = { 0.5f, 0.15f, 130.0f };
+bool plane_rotate = true;
 int over = 0;
 
 void init(void) {
@@ -52,6 +58,12 @@ void display(void) {
     int i;
     switch (over) {
     case 0:
+        // Planetary System
+        glLoadIdentity();
+        Planet_System(planet[0], planet[1], planet[2], planet[3], planet[4]);
+
+        Planet_System(planet2[0], planet2[1], planet2[2], planet2[3], -planet2[4]);
+
         //player
         switch (player.getHP()) {
         case 3:
@@ -217,6 +229,9 @@ void keyboard(unsigned char key, int x, int y) {
         if (mode == ALLFAIL) mode = NORMAL;
         else mode = ALLFAIL;
         break;
+    case 'p':
+        enemy_bullets.shoot(false);
+        break;
     case 32:  //space bar
         player_bullets.shoot(true);
         break;
@@ -248,6 +263,18 @@ void idle_func() {
     player_bullets.move_bullets(UP);
     enemy_bullets.move_bullets(DOWN);
     enemy_list.move();
+    planet[4] += 0.5;
+    planet2[4] += 1;
+
+    if (plane_rotate == true)
+        plane[2] -= 0.2;
+    else
+        plane[2] += 0.2;
+
+    if (plane[2] > 120)
+        plane_rotate = true;
+    if (plane[2] < 100)
+        plane_rotate = false;
 
     glutPostRedisplay();
 }
