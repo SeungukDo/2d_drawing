@@ -28,23 +28,6 @@ void init(void) {
     */
 }
 
-void drawTri() {
-    glBegin(GL_TRIANGLES);
-    glVertex2f(0, 0);
-    glVertex2f(PLAYER_WIDTH, 0);
-    glVertex2f(PLAYER_WIDTH / 2, PLAYER_HEIGHT);
-    glEnd();
-}
-
-void drawRect() {
-    glBegin(GL_QUADS);
-    glVertex2f(0, 0);
-    glVertex2f(BULLET_WIDTH, 0);
-    glVertex2f(BULLET_WIDTH, BULLET_HEIGHT);
-    glVertex2f(0, BULLET_HEIGHT);
-    glEnd();
-}
-
 void display(void) {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -61,7 +44,6 @@ void display(void) {
         // Planetary System
         glLoadIdentity();
         Planet_System(planet[0], planet[1], planet[2], planet[3], planet[4]);
-
         Planet_System(planet2[0], planet2[1], planet2[2], planet2[3], -planet2[4]);
 
         //player
@@ -76,17 +58,17 @@ void display(void) {
             glColor3f(1.0, 0, 0);
             break;
         }
-        glLoadIdentity();
-        glTranslatef(player_shape.x, player_shape.y, 0);
-        drawTri();
+        Plane(player_shape.x, player_shape.y, plane[2]);
 
         //player bullet
         player_bullet_shapes = player_bullets.get_bullet_shapes();
         for (i = 0; i < player_bullet_shapes.size(); i++) {
             rectangle bullet_shape = player_bullet_shapes[i];
-            glLoadIdentity();
-            glTranslatef(bullet_shape.x, bullet_shape.y, 0);
-            drawRect();
+            Origin();
+            Move(bullet_shape.x, bullet_shape.y);
+            drawFilledCircle();
+            Origin();
+            //drawRect();
         }
 
         //enemy
@@ -107,19 +89,19 @@ void display(void) {
             glColor3f(0, 0, 1.0);
             break;
         }
-        glLoadIdentity();
-        glRotatef(180, 0, 0, 1);
-        glTranslatef(-enemy_shape.x - PLAYER_WIDTH, -enemy_shape.y, 0);
-        drawTri();
+
+        Rotatete();
+        Plane(-enemy_shape.x, -enemy_shape.y, 220 - plane[2]);
+        Origin();
 
         //enemy bullet
         enemy_bullet_shapes = enemy_bullets.get_bullet_shapes();
         for (i = 0; i < enemy_bullet_shapes.size(); i++) {
             rectangle bullet_shape = enemy_bullet_shapes[i];
-            glLoadIdentity();
-            glRotatef(180, 0, 0, 1);
-            glTranslatef(-bullet_shape.x, -bullet_shape.y, 0);
-            drawRect();
+            Origin();
+            Move(-bullet_shape.x, -bullet_shape.y);
+            drawFilledCircle();
+            Origin();
         }
         break;
 
