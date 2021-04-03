@@ -64,11 +64,7 @@ void display(void) {
         player_bullet_shapes = player_bullets.get_bullet_shapes();
         for (i = 0; i < player_bullet_shapes.size(); i++) {
             rectangle bullet_shape = player_bullet_shapes[i];
-            Origin();
-            Move(bullet_shape.x, bullet_shape.y);
-            drawFilledCircle();
-            Origin();
-            //drawRect();
+            Bullet(bullet_shape.x, bullet_shape.y, 0.01f);
         }
 
         //enemy
@@ -98,10 +94,7 @@ void display(void) {
         enemy_bullet_shapes = enemy_bullets.get_bullet_shapes();
         for (i = 0; i < enemy_bullet_shapes.size(); i++) {
             rectangle bullet_shape = enemy_bullet_shapes[i];
-            Origin();
-            Move(-bullet_shape.x, -bullet_shape.y);
-            drawFilledCircle();
-            Origin();
+            Bullet(bullet_shape.x, bullet_shape.y, 0.01f);
         }
         break;
 

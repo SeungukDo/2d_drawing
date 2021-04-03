@@ -196,4 +196,17 @@ void Plane(float x, float y, float theta) {
 	traverse(&head);
 }
 
+void Bullet(float x, float y, float radius){
+	treenode bullet;
+
+	bullet.child = NULL;
+	bullet.m = glm::translate(bullet.m, glm::vec3(x, y, 0.0f));
+	bullet.m = glm::scale(bullet.m, glm::vec3(radius, radius, 0.0f));
+	bullet.f = drawFilledCircle;
+	bullet.col = fillWhite;
+	bullet.sibling = NULL;
+
+	traverse(&bullet);
+}
+
 #endif
