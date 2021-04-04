@@ -1,5 +1,7 @@
 #ifndef BULLET_H
 #define BULLET_H
+#define BULLET_RADIUS 0.01f
+#define BULLET_SPEED 0.01f
 #include "./object.h"
 
 class Bullet : public Object{
@@ -91,7 +93,7 @@ public:
                     if (bullet_list[i].get_position().y - BULLET_SPEED <= 0.0) {
                         bullet_list.erase(bullet_list.begin() + i);
                     }
-                    else if (bullet_list[i].get_position().x + BULLET_SPEED <= 0.0) {
+                    else if (bullet_list[i].get_position().x - BULLET_SPEED <= 0.0) {
                         bullet_list.erase(bullet_list.begin() + i);
                     }
                     break;

@@ -6,6 +6,7 @@
 #include "objects/player.h"
 #include "objects/enemy.h"
 #include "objects/bullet.h"
+#include "objects/item.h"
 #include "mode.h"
 #include "graph.h"
 #include "hit.h"
@@ -14,6 +15,7 @@ Player player = Player();
 EnemyList enemy_list = EnemyList();
 BulletList player_bullets = BulletList(PLAYER);
 BulletList enemy_bullets = BulletList(ENEMY);
+ItemList item_list = ItemList();
 Gamemode mode = NORMAL;
 float planet[5] = { 0.3f, 0.3f, 0.1f, 0.1f, 0.0f };
 float planet2[5] = { 0.8f, 0.9f, 0.05f, 0.05f, 0.0f };
@@ -42,6 +44,7 @@ void display(void) {
     Position enemy_position = enemy_list.getEnemy().get_position();
     std::vector <Position> player_bullet_positions;
     std::vector <Position> enemy_bullet_positions;
+    std::vector<Position> item_positions;
 
     int i;
     switch (over) {
@@ -101,8 +104,15 @@ void display(void) {
             Position bullet_position = enemy_bullet_positions[i];
             Bullet(bullet_position.x, bullet_position.y, BULLET_RADIUS);
         }
-        break;
 
+        //item
+        item_positions = item_list.get_item_positions();
+        for (i = 0; i < item_positions.size(); i++) {
+            Position item_position = item_positions[i];
+            Item(item_position.x, item_position.y, ITEM_LENGTH);
+        }
+        
+        break;
 
     case 1:
         glLoadIdentity();
@@ -240,6 +250,7 @@ void idle_func() {
     player_bullets.move_bullets();
     enemy_bullets.move_bullets();
     enemy_list.move();
+    item_list.move_items();
     planet[4] += 0.5;
     planet2[4] += 1;
 
@@ -254,6 +265,8 @@ void idle_func() {
         plane_rotate = false;
 
     check_hit();
+
+    check_get_item();
 
     glutPostRedisplay();
 }

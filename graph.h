@@ -209,4 +209,17 @@ void Bullet(float x, float y, float radius){
 	traverse(&bullet);
 }
 
+void Item(float x, float y, float length) {
+	treenode item;
+
+	item.child = NULL;
+	item.m = glm::translate(item.m, glm::vec3(x, y, 0.0f));
+	item.m = glm::scale(item.m, glm::vec3(length, length, 0.0f));
+	item.f = drawTri;
+	item.col = fillWhite;
+	item.sibling = NULL;
+
+	traverse(&item);
+}
+
 #endif

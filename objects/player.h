@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "./bullet.h"
+#include "./item.h"
 
 class Player : public Object{
 private:
@@ -25,6 +26,7 @@ public:
         }
     }
 
+    void increase_item() { if (item <= 2) item++; }
 
     void shoot() {
         std::vector <BulletType> bullet_types;
@@ -45,6 +47,10 @@ public:
                 bullet_types.push_back(NORMAL_UPLEFT);
                 break;
             default:
+                bullet_types.clear();
+                bullet_types.push_back(NORMAL_UP);
+                bullet_types.push_back(NORMAL_UPRIGHT);
+                bullet_types.push_back(NORMAL_UPLEFT);
                 break;
         }
         player_bullets.shoot(bullet_types, position);

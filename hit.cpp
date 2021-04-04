@@ -18,10 +18,11 @@ void check_hit() {
   }
 
   for (int i = 0; i < enemy_bullets.get_size(); i++){
-    if (is_in_hitbox(enemy_bullet_positions[i], player_position, UP) == true)
+    if (is_in_hitbox(enemy_bullet_positions[i], player_position, UP) == true){
       player_hit_flag = true;
       enemy_bullets.erase_bullet(i);
       break;
+    }
   }
 
   if (player_hit_flag == true) {
@@ -30,6 +31,19 @@ void check_hit() {
 
   if (enemy_hit_flag == true) {
     enemy_list.decrease_hp();
+  }
+
+}
+
+void check_get_item() {
+  Position player_position = player.get_position();
+
+  for (int i = 0; i < item_list.get_size(); i++) {
+    Position item_position = item_list.get_item(i).get_position();
+    if (is_in_hitbox(item_position, player_position, UP) == true) {
+      player.increase_item();
+      item_list.remove_item(i);
+    }
   }
 
 }

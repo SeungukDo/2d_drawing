@@ -2,6 +2,7 @@
 #define ENEMY_H
 #include "./object.h"
 #include "./bullet.h"
+#include "./item.h"
 
 class Enemy : public Object{
 private:
@@ -24,6 +25,7 @@ public:
         if (hp <= 0) return false;
         else return true;
     }
+    void increase_level() { level++; }
     void move(int idx) {
         if (idx == 0) {
             if (position.x > 0.8) isRight = false;
@@ -70,13 +72,17 @@ public:
                 bullet_types.push_back(NORMAL_DOWNRIGHT);
                 bullet_types.push_back(NORMAL_DOWNLEFT);
                 break;
-            case 2:
+            case 3:
                 bullet_types.clear();
                 bullet_types.push_back(NORMAL_DOWN);
                 bullet_types.push_back(NORMAL_DOWNRIGHT);
                 bullet_types.push_back(NORMAL_DOWNLEFT);
                 break;
             default:
+                bullet_types.clear();
+                bullet_types.push_back(NORMAL_DOWN);
+                bullet_types.push_back(NORMAL_DOWNRIGHT);
+                bullet_types.push_back(NORMAL_DOWNLEFT);
                 break;
         }
         enemy_bullets.shoot(bullet_types, position);
@@ -94,7 +100,7 @@ public:
         index = 0;
         total_num = 5;
         for (int i = 0; i < total_num; i++) {
-            enemy_list.push_back(Enemy(i + 1));
+            enemy_list.push_back(Enemy(i + 1, i));
         }
     }
     Enemy getEnemy() { return enemy_list[index]; }
@@ -107,6 +113,7 @@ public:
                 over = 1;
                 return;
             }
+            item_list.create_item(enemy_list[index].get_position());
             index++;    
         }
     }

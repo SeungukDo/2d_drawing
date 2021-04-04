@@ -6,4 +6,5 @@
 
 void check_hit();
 bool is_in_hitbox(Position, Position, Direction);
+void check_get_item();
 #endif
