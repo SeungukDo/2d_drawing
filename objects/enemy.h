@@ -18,16 +18,9 @@ public:
         position.y = 0.85f;
     };
     int getHP() { return hp; }
-    bool hit() {
-        Position enemy_position = get_position();
-        for (int i = 0; i < player_bullets.get_size(); i++) {
-            Position player_bullet_position = player_bullets.get_bullet(i).get_position();
-            if (isHit(player_bullet_position.x, player_bullet_position.y, enemy_position.x, enemy_position.y, PLAYER)) {
-                    if (mode == ALLPASS) hp = 0;
-                    else hp--;
-                    enemy_bullets.erase_bullet(i);
-                }
-        }
+    bool decrease_hp() {
+        if (mode == ALLPASS) hp = 0;
+        else hp--;
         if (hp <= 0) return false;
         else return true;
     }
@@ -108,13 +101,13 @@ public:
     int getIndex() { return index; }
     void move() { enemy_list[index].move(index); }
     void move_2() { enemy_list[index].move_2(index); }
-    void hit() {
-        if (enemy_list[index].hit() == false) {
+    void decrease_hp() {
+        if (enemy_list[index].decrease_hp() == false){
             if (index + 1 == total_num) {
                 over = 1;
                 return;
             }
-            index++;
+            index++;    
         }
     }
 };

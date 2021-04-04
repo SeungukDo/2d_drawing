@@ -8,6 +8,7 @@
 #include "objects/bullet.h"
 #include "mode.h"
 #include "graph.h"
+#include "hit.h"
 
 Player player = Player();
 EnemyList enemy_list = EnemyList();
@@ -251,6 +252,8 @@ void idle_func() {
         plane_rotate = true;
     if (plane[2] < 100)
         plane_rotate = false;
+
+    check_hit();
 
     glutPostRedisplay();
 }

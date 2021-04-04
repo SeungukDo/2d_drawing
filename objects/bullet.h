@@ -42,7 +42,6 @@ public:
                     bullet_list[i].move_up(BULLET_SPEED);
                     if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
                         bullet_list.erase(bullet_list.begin() + i);
-                        return;
                     }
                     break;
 
@@ -50,7 +49,6 @@ public:
                     bullet_list[i].move_down(BULLET_SPEED);
                     if (bullet_list[i].get_position().y - BULLET_SPEED <= 0) {
                         bullet_list.erase(bullet_list.begin() + i);
-                        return;
                     }
                     break;
 
@@ -59,11 +57,9 @@ public:
                     bullet_list[i].move_right(BULLET_SPEED * cos(45 * (PI/180)));
                     if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
                         bullet_list.erase(bullet_list.begin() + i);
-                        return;
                     }
                     else if (bullet_list[i].get_position().x + BULLET_SPEED >= 0.98) {
                         bullet_list.erase(bullet_list.begin() + i);
-                        return;
                     }
                     break;
 
@@ -72,11 +68,9 @@ public:
                     bullet_list[i].move_left(BULLET_SPEED * cos(45 * (PI/180)));
                     if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
                         bullet_list.erase(bullet_list.begin() + i);
-                        return;
                     }
                     else if (bullet_list[i].get_position().x - BULLET_SPEED <= 0.0) {
                         bullet_list.erase(bullet_list.begin() + i);
-                        return;
                     }
                     break;
                 
@@ -85,11 +79,9 @@ public:
                     bullet_list[i].move_right(BULLET_SPEED * cos(45 * (PI/180)));
                     if (bullet_list[i].get_position().y - BULLET_SPEED <= 0.0) {
                         bullet_list.erase(bullet_list.begin() + i);
-                        return;
                     }
                     else if (bullet_list[i].get_position().x + BULLET_SPEED >= 0.98) {
                         bullet_list.erase(bullet_list.begin() + i);
-                        return;
                     }
                     break;
                 
@@ -98,11 +90,9 @@ public:
                     bullet_list[i].move_left(BULLET_SPEED * cos(45 * (PI/180)));
                     if (bullet_list[i].get_position().y - BULLET_SPEED <= 0.0) {
                         bullet_list.erase(bullet_list.begin() + i);
-                        return;
                     }
                     else if (bullet_list[i].get_position().x + BULLET_SPEED <= 0.0) {
                         bullet_list.erase(bullet_list.begin() + i);
-                        return;
                     }
                     break;
 
@@ -125,6 +115,7 @@ public:
 extern BulletList player_bullets;
 extern BulletList enemy_bullets;
 
+/*
 bool isHit(float bx, float by, float tx, float ty, Owner owner) {
         int i = -1;
         if (owner == PLAYER) i = 1;
@@ -138,5 +129,5 @@ bool isHit(float bx, float by, float tx, float ty, Owner owner) {
                 (i * by + BULLET_RADIUS / 2 < i * ty - PLAYER_HEIGHT / 10) &&
                 (i * by + BULLET_RADIUS / 2 > i * ty - 4 * PLAYER_HEIGHT / 5)));
 }
-
+*/
 #endif

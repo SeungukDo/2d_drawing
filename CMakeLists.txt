@@ -4,7 +4,7 @@ PROJECT ("2D Drawing")
 
 SET (OUTPUT_ELF "2d_drawing.out")
 
-SET (SRC_FILES "./main.cpp")
+SET (SRC_FILES "./main.cpp" "./hit.cpp")
 
 SET (CMAKE_CXX_COMPILER "clang++")
 

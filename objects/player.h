@@ -25,21 +25,6 @@ public:
         }
     }
 
-    void hit() {
-        if (mode == ALLPASS);
-        else {
-            Position player_position = get_position();
-            for (int i = 0; i < enemy_bullets.get_size(); i++) {
-                Position enemy_bullet_position = enemy_bullets.get_bullet(i).get_position();
-                if (isHit(enemy_bullet_position.x, enemy_bullet_position.y, player_position.x, player_position.y, ENEMY)) {
-                        if (mode == ALLFAIL) hp = 0;
-                        else hp--;
-                        if (hp == 0) over = 2;
-                        enemy_bullets.erase_bullet(i);
-                    }
-            }
-        }        
-    }
 
     void shoot() {
         std::vector <BulletType> bullet_types;
