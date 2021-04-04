@@ -2,9 +2,9 @@
 #define MODE_H
 
 enum Gamemode {
-  NORMAL,
-  ALLPASS,
-  ALLFAIL,
+	NORMAL,
+	ALLPASS,
+	ALLFAIL,
 };
 
 extern Gamemode mode;

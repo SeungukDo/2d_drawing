@@ -1,14 +1,24 @@
+#ifdef __APPLE__
+#define GL_SILENCE_DEPRECATION
 #include <GL/freeglut.h>
 //#include <OpenGL/gl.h>
 #include <vector>
-#include "objects.h"
+#include "objects/player.h"
+#include "objects/enemy.h"
+#include "objects/bullet.h"
 #include "mode.h"
+#include "graph.h"
 
 Player player = Player();
 EnemyList enemy_list = EnemyList();
-BulletList player_bullets;
-BulletList enemy_bullets;
+BulletList player_bullets = BulletList(PLAYER);
+BulletList enemy_bullets = BulletList(ENEMY);
 Gamemode mode = NORMAL;
+float planet[5] = { 0.3f, 0.3f, 0.1f, 0.1f, 0.0f };
+float planet2[5] = { 0.8f, 0.9f, 0.05f, 0.05f, 0.0f };
+
+float plane[3] = { 0.5f, 0.15f, 130.0f };
+bool plane_rotate = true;
 int over = 0;
 
 void init(void) {
@@ -22,36 +32,24 @@ void init(void) {
     */
 }
 
-void drawTri() {
-    glBegin(GL_TRIANGLES);
-    glVertex2f(0, 0);
-    glVertex2f(PLAYER_WIDTH, 0);
-    glVertex2f(PLAYER_WIDTH / 2, PLAYER_HEIGHT);
-    glEnd();
-}
-
-void drawRect() {
-    glBegin(GL_QUADS);
-    glVertex2f(0, 0);
-    glVertex2f(BULLET_WIDTH, 0);
-    glVertex2f(BULLET_WIDTH, BULLET_HEIGHT);
-    glVertex2f(0, BULLET_HEIGHT);
-    glEnd();
-}
-
 void display(void) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     glColor3f(1.0, 1.0, 1.0);
 
-    triangle player_shape = *player.get_shape();
-    triangle enemy_shape = *enemy_list.getEnemy().get_shape();
-    std::vector <rectangle> player_bullet_shapes;
-    std::vector <rectangle> enemy_bullet_shapes;
+    Position player_position = player.get_position();
+    Position enemy_position = enemy_list.getEnemy().get_position();
+    std::vector <Position> player_bullet_positions;
+    std::vector <Position> enemy_bullet_positions;
 
     int i;
     switch (over) {
     case 0:
+        // Planetary System
+        glLoadIdentity();
+        Planet_System(planet[0], planet[1], planet[2], planet[3], planet[4]);
+        Planet_System(planet2[0], planet2[1], planet2[2], planet2[3], -planet2[4]);
+
         //player
         switch (player.getHP()) {
         case 3:
@@ -64,17 +62,13 @@ void display(void) {
             glColor3f(1.0, 0, 0);
             break;
         }
-        glLoadIdentity();
-        glTranslatef(player_shape.x, player_shape.y, 0);
-        drawTri();
+        Plane(player_position.x, player_position.y, plane[2]);
 
         //player bullet
-        player_bullet_shapes = player_bullets.get_bullet_shapes();
-        for (i = 0; i < player_bullet_shapes.size(); i++) {
-            rectangle bullet_shape = player_bullet_shapes[i];
-            glLoadIdentity();
-            glTranslatef(bullet_shape.x, bullet_shape.y, 0);
-            drawRect();
+        player_bullet_positions = player_bullets.get_bullet_positions();
+        for (i = 0; i < player_bullet_positions.size(); i++) {
+            Position bullet_position = player_bullet_positions[i];
+            Bullet(bullet_position.x, bullet_position.y, BULLET_RADIUS);
         }
 
         //enemy
@@ -95,19 +89,16 @@ void display(void) {
             glColor3f(0, 0, 1.0);
             break;
         }
-        glLoadIdentity();
-        glRotatef(180, 0, 0, 1);
-        glTranslatef(-enemy_shape.x - PLAYER_WIDTH, -enemy_shape.y, 0);
-        drawTri();
+
+        Rotatete();
+        Plane(-enemy_position.x, -enemy_position.y, 220 - plane[2]);
+        Origin();
 
         //enemy bullet
-        enemy_bullet_shapes = enemy_bullets.get_bullet_shapes();
-        for (i = 0; i < enemy_bullet_shapes.size(); i++) {
-            rectangle bullet_shape = enemy_bullet_shapes[i];
-            glLoadIdentity();
-            glRotatef(180, 0, 0, 1);
-            glTranslatef(-bullet_shape.x, -bullet_shape.y, 0);
-            drawRect();
+        enemy_bullet_positions = enemy_bullets.get_bullet_positions();
+        for (i = 0; i < enemy_bullet_positions.size(); i++) {
+            Position bullet_position = enemy_bullet_positions[i];
+            Bullet(bullet_position.x, bullet_position.y, BULLET_RADIUS);
         }
         break;
 
@@ -218,14 +209,14 @@ void keyboard(unsigned char key, int x, int y) {
         else mode = ALLFAIL;
         break;
     case 32:  //space bar
-        player_bullets.shoot(true);
+        player.shoot();
         break;
     }
     glutPostRedisplay();
 }
 
 void specialkeyboard(int key, int x, int y) {
-    triangle player_shape = *player.get_shape();
+    Position player_position = player.get_position();
 
     switch (key) {
     case GLUT_KEY_UP:
@@ -245,15 +236,27 @@ void specialkeyboard(int key, int x, int y) {
 }
 
 void idle_func() {
-    player_bullets.move_bullets(UP);
-    enemy_bullets.move_bullets(DOWN);
+    player_bullets.move_bullets();
+    enemy_bullets.move_bullets();
     enemy_list.move();
+    planet[4] += 0.5;
+    planet2[4] += 1;
+
+    if (plane_rotate == true)
+        plane[2] -= 0.2;
+    else
+        plane[2] += 0.2;
+
+    if (plane[2] > 120)
+        plane_rotate = true;
+    if (plane[2] < 100)
+        plane_rotate = false;
 
     glutPostRedisplay();
 }
 
 void timer_func(int a) {
-    enemy_bullets.shoot(false);
+    enemy_list.getEnemy().shoot();
     if (enemy_list.getIndex() != 0) { enemy_list.move_2(); }
 
     glutTimerFunc(500, timer_func, 1);
@@ -277,3 +280,4 @@ int main(int argc, char** argv) {
     glutMainLoop();
     return 0;
 }
+#endif
