@@ -2,6 +2,21 @@
 #define BULLET_H
 #include "./object.h"
 
+enum BulletType {
+    NORMAL_UP,
+    NORMAL_DOWN,
+    NORMAL_RIGHT,
+    NORMAL_LEFT,
+    NORMAL_UPRIGHT,
+    NORMAL_UPRIGHT15,
+    NORMAL_UPLEFT,
+    NORMAL_UPLEFT15,
+    NORMAL_DOWNRIGHT,
+    NORMAL_DOWNRIGHT15,
+    NORMAL_DOWNLEFT,
+    NORMAL_DOWNLEFT15,
+};
+
 class Bullet : public Object{
 private:
     BulletType bullet_type;
@@ -67,9 +82,35 @@ public:
                     }
                     break;
 
+                case NORMAL_UPRIGHT15:
+                    bullet_list[i].move_up(BULLET_SPEED * cos(15 * (PI/180)));
+                    bullet_list[i].move_right(BULLET_SPEED * sin(15 * (PI/180)));
+                    if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
+                        bullet_list.erase(bullet_list.begin() + i);
+                        return;
+                    }
+                    else if (bullet_list[i].get_position().x + BULLET_SPEED >= 0.98) {
+                        bullet_list.erase(bullet_list.begin() + i);
+                        return;
+                    }
+                    break;
+
                 case NORMAL_UPLEFT:
                     bullet_list[i].move_up(BULLET_SPEED * cos(45 * (PI/180)));
                     bullet_list[i].move_left(BULLET_SPEED * cos(45 * (PI/180)));
+                    if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
+                        bullet_list.erase(bullet_list.begin() + i);
+                        return;
+                    }
+                    else if (bullet_list[i].get_position().x - BULLET_SPEED <= 0.0) {
+                        bullet_list.erase(bullet_list.begin() + i);
+                        return;
+                    }
+                    break;
+
+                case NORMAL_UPLEFT15:
+                    bullet_list[i].move_up(BULLET_SPEED * cos(15 * (PI/180)));
+                    bullet_list[i].move_left(BULLET_SPEED * sin(15 * (PI/180)));
                     if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
                         bullet_list.erase(bullet_list.begin() + i);
                         return;
@@ -92,10 +133,36 @@ public:
                         return;
                     }
                     break;
+
+                case NORMAL_DOWNRIGHT15:
+                    bullet_list[i].move_down(BULLET_SPEED * cos(15 * (PI/180)));
+                    bullet_list[i].move_right(BULLET_SPEED * sin(15 * (PI/180)));
+                    if (bullet_list[i].get_position().y - BULLET_SPEED <= 0.0) {
+                        bullet_list.erase(bullet_list.begin() + i);
+                        return;
+                    }
+                    else if (bullet_list[i].get_position().x + BULLET_SPEED >= 0.98) {
+                        bullet_list.erase(bullet_list.begin() + i);
+                        return;
+                    }
+                    break;
                 
                 case NORMAL_DOWNLEFT:
                     bullet_list[i].move_down(BULLET_SPEED * cos(45 * (PI/180)));
                     bullet_list[i].move_left(BULLET_SPEED * cos(45 * (PI/180)));
+                    if (bullet_list[i].get_position().y - BULLET_SPEED <= 0.0) {
+                        bullet_list.erase(bullet_list.begin() + i);
+                        return;
+                    }
+                    else if (bullet_list[i].get_position().x + BULLET_SPEED <= 0.0) {
+                        bullet_list.erase(bullet_list.begin() + i);
+                        return;
+                    }
+                    break;
+                
+                case NORMAL_DOWNLEFT15:
+                    bullet_list[i].move_down(BULLET_SPEED * cos(15 * (PI/180)));
+                    bullet_list[i].move_left(BULLET_SPEED * sin(15 * (PI/180)));
                     if (bullet_list[i].get_position().y - BULLET_SPEED <= 0.0) {
                         bullet_list.erase(bullet_list.begin() + i);
                         return;

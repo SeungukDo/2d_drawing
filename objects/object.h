@@ -39,17 +39,6 @@ enum Direction {
     DOWNLEFT,
 };
 
-enum BulletType {
-    NORMAL_UP,
-    NORMAL_DOWN,
-    NORMAL_RIGHT,
-    NORMAL_LEFT,
-    NORMAL_UPRIGHT,
-    NORMAL_UPLEFT,
-    NORMAL_DOWNRIGHT,
-    NORMAL_DOWNLEFT,
-};
-
 enum Owner {
     PLAYER,
     ENEMY
