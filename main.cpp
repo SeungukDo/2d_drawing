@@ -1,4 +1,3 @@
-#ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #include <GL/freeglut.h>
 //#include <OpenGL/gl.h>
@@ -296,4 +295,3 @@ int main(int argc, char** argv) {
     glutMainLoop();
     return 0;
 }
-#endif
