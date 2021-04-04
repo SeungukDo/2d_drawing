@@ -72,20 +72,20 @@ public:
                 bullet_types.push_back(NORMAL_DOWNRIGHT15);
                 bullet_types.push_back(NORMAL_DOWNLEFT15);
                 break;
-            case 3:
+            case 2:
                 bullet_types.clear();
                 bullet_types.push_back(NORMAL_DOWN);
-                bullet_types.push_back(NORMAL_DOWNRIGHT);
-                bullet_types.push_back(NORMAL_DOWNLEFT);
+                bullet_types.push_back(NORMAL_DOWNRIGHT15);
+                bullet_types.push_back(NORMAL_DOWNLEFT15);
                 break;
-            case 4:
+            case 3:
                 bullet_types.clear();
                 bullet_types.push_back(NORMAL_DOWN);
                 bullet_types.push_back(NORMAL_DOWNRIGHT);
                 bullet_types.push_back(NORMAL_DOWNRIGHT15);
                 bullet_types.push_back(NORMAL_DOWNLEFT);
                 break;
-            case 5:
+            case 4:
                 bullet_types.clear();
                 bullet_types.push_back(NORMAL_DOWN);
                 bullet_types.push_back(NORMAL_DOWNRIGHT);

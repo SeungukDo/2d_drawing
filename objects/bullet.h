@@ -51,124 +51,154 @@ public:
     }
 
     void move_bullets() {
-        for (int i = 0; i < bullet_list.size(); i++) {
-            BulletType d = bullet_list[i].get_bullet_type();
+
+        std::vector<Bullet>::iterator iter = bullet_list.begin();
+
+        while(iter != bullet_list.end()) {
+            BulletType d = iter -> get_bullet_type();
 
             switch (d){
                 case NORMAL_UP:
-                    bullet_list[i].move_up(BULLET_SPEED);
-                    if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    iter -> move_up(BULLET_SPEED);
+                    if (iter -> get_position().y + BULLET_SPEED >= 0.98) {
+                        iter = bullet_list.erase(iter--);
+                    }
+                    else {
+                        iter ++;
                     }
                     break;
 
                 case NORMAL_DOWN:
-                    bullet_list[i].move_down(BULLET_SPEED);
-                    if (bullet_list[i].get_position().y - BULLET_SPEED <= 0) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    iter -> move_down(BULLET_SPEED);
+                    if (iter -> get_position().y - BULLET_SPEED <= 0.0) {
+                        iter = bullet_list.erase(iter--);
+                    }
+                    else {
+                        iter ++;
                     }
                     break;
 
                 case NORMAL_UPRIGHT:
-                    bullet_list[i].move_up(BULLET_SPEED * cos(45 * (PI/180)));
-                    bullet_list[i].move_right(BULLET_SPEED * cos(45 * (PI/180)));
-                    if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    iter -> move_up(BULLET_SPEED * cos(45 * (PI/180)));
+                    iter -> move_right(BULLET_SPEED * cos(45 * (PI/180)));
+                    if (iter -> get_position().y + BULLET_SPEED >= 0.98) {
+                        iter = bullet_list.erase(iter);
                     }
-                    else if (bullet_list[i].get_position().x + BULLET_SPEED >= 0.98) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    else if (iter -> get_position().x + BULLET_SPEED >= 0.98) {
+                        iter = bullet_list.erase(iter);
+                    }
+                    else {
+                        iter ++;
                     }
                     break;
 
                 case NORMAL_UPRIGHT15:
-                    bullet_list[i].move_up(BULLET_SPEED * cos(15 * (PI/180)));
-                    bullet_list[i].move_right(BULLET_SPEED * sin(15 * (PI/180)));
-                    if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
-                        bullet_list.erase(bullet_list.begin() + i);
-                        return;
+                    iter -> move_up(BULLET_SPEED * cos(15 * (PI/180)));
+                    iter -> move_right(BULLET_SPEED * sin(15 * (PI/180)));
+                    if (iter -> get_position().y + BULLET_SPEED >= 0.98) {
+                        iter = bullet_list.erase(iter);
                     }
-                    else if (bullet_list[i].get_position().x + BULLET_SPEED >= 0.98) {
-                        bullet_list.erase(bullet_list.begin() + i);
-                        return;
+                    else if (iter -> get_position().x + BULLET_SPEED >= 0.98) {
+                        iter = bullet_list.erase(iter);
+                    }
+                    else {
+                        iter ++;
                     }
                     break;
 
                 case NORMAL_UPLEFT:
-                    bullet_list[i].move_up(BULLET_SPEED * cos(45 * (PI/180)));
-                    bullet_list[i].move_left(BULLET_SPEED * cos(45 * (PI/180)));
-                    if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    iter -> move_up(BULLET_SPEED * cos(45 * (PI/180)));
+                    iter -> move_left(BULLET_SPEED * cos(45 * (PI/180)));
+                    if (iter -> get_position().y + BULLET_SPEED >= 0.98) {
+                        iter = bullet_list.erase(iter);
                     }
-                    else if (bullet_list[i].get_position().x - BULLET_SPEED <= 0.0) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    else if (iter -> get_position().x - BULLET_SPEED <= 0.0) {
+                        iter = bullet_list.erase(iter);
+                    }
+                    else {
+                        iter ++;
                     }
                     break;
 
                 case NORMAL_UPLEFT15:
-                    bullet_list[i].move_up(BULLET_SPEED * cos(15 * (PI/180)));
-                    bullet_list[i].move_left(BULLET_SPEED * sin(15 * (PI/180)));
-                    if (bullet_list[i].get_position().y + BULLET_SPEED >= 0.98) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    iter -> move_up(BULLET_SPEED * cos(15 * (PI/180)));
+                    iter -> move_left(BULLET_SPEED * sin(15 * (PI/180)));
+                    if (iter -> get_position().y + BULLET_SPEED >= 0.98) {
+                        iter = bullet_list.erase(iter);
                         return;
                     }
-                    else if (bullet_list[i].get_position().x - BULLET_SPEED <= 0.0) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    else if (iter -> get_position().x - BULLET_SPEED <= 0.0) {
+                        iter = bullet_list.erase(iter);
                         return;
+                    }
+                    else {
+                        iter ++;
                     }
                     break;
                 
                 case NORMAL_DOWNRIGHT:
-                    bullet_list[i].move_down(BULLET_SPEED * cos(45 * (PI/180)));
-                    bullet_list[i].move_right(BULLET_SPEED * cos(45 * (PI/180)));
-                    if (bullet_list[i].get_position().y - BULLET_SPEED <= 0.0) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    iter -> move_down(BULLET_SPEED * cos(45 * (PI/180)));
+                    iter -> move_right(BULLET_SPEED * cos(45 * (PI/180)));
+                    if (iter -> get_position().y - BULLET_SPEED <= 0.0) {
+                        iter = bullet_list.erase(iter);
                     }
-                    else if (bullet_list[i].get_position().x + BULLET_SPEED >= 0.98) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    else if (iter -> get_position().x + BULLET_SPEED >= 0.98) {
+                        iter = bullet_list.erase(iter);
+                    }
+                    else {
+                        iter ++;
                     }
                     break;
 
                 case NORMAL_DOWNRIGHT15:
-                    bullet_list[i].move_down(BULLET_SPEED * cos(15 * (PI/180)));
-                    bullet_list[i].move_right(BULLET_SPEED * sin(15 * (PI/180)));
-                    if (bullet_list[i].get_position().y - BULLET_SPEED <= 0.0) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    iter -> move_down(BULLET_SPEED * cos(15 * (PI/180)));
+                    iter -> move_right(BULLET_SPEED * sin(15 * (PI/180)));
+                    if (iter -> get_position().y - BULLET_SPEED <= 0.0) {
+                        iter = bullet_list.erase(iter);
                         return;
                     }
-                    else if (bullet_list[i].get_position().x + BULLET_SPEED >= 0.98) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    else if (iter -> get_position().x + BULLET_SPEED >= 0.98) {
+                        iter = bullet_list.erase(iter);
                         return;
+                    }
+                    else {
+                        iter ++;
                     }
                     break;
                 
                 case NORMAL_DOWNLEFT:
-                    bullet_list[i].move_down(BULLET_SPEED * cos(45 * (PI/180)));
-                    bullet_list[i].move_left(BULLET_SPEED * cos(45 * (PI/180)));
-                    if (bullet_list[i].get_position().y - BULLET_SPEED <= 0.0) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    iter -> move_down(BULLET_SPEED * cos(45 * (PI/180)));
+                    iter -> move_left(BULLET_SPEED * cos(45 * (PI/180)));
+                    if (iter -> get_position().y - BULLET_SPEED <= 0.0) {
+                        iter = bullet_list.erase(iter);
                     }
-                    else if (bullet_list[i].get_position().x - BULLET_SPEED <= 0.0) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    else if (iter -> get_position().x - BULLET_SPEED <= 0.0) {
+                        iter = bullet_list.erase(iter);
+                    }
+                    else {
+                        iter ++;
                     }
                     break;
                 
                 case NORMAL_DOWNLEFT15:
-                    bullet_list[i].move_down(BULLET_SPEED * cos(15 * (PI/180)));
-                    bullet_list[i].move_left(BULLET_SPEED * sin(15 * (PI/180)));
-                    if (bullet_list[i].get_position().y - BULLET_SPEED <= 0.0) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    iter -> move_down(BULLET_SPEED * cos(15 * (PI/180)));
+                    iter -> move_left(BULLET_SPEED * sin(15 * (PI/180)));
+                    if (iter -> get_position().y - BULLET_SPEED <= 0.0) {
+                        iter = bullet_list.erase(iter);
                         return;
                     }
-                    else if (bullet_list[i].get_position().x + BULLET_SPEED <= 0.0) {
-                        bullet_list.erase(bullet_list.begin() + i);
+                    else if (iter -> get_position().x + BULLET_SPEED <= 0.0) {
+                        iter = bullet_list.erase(iter);
                         return;
+                    }
+                    else {
+                        iter ++;
                     }
                     break;
 
                 default:
                     break;
             }
-            Position bullet_position = bullet_list[i].get_position();
         }
     }
 
