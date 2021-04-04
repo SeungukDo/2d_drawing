@@ -16,6 +16,15 @@ public:
 
     int getHP() { return hp; }
 
+    void decrease_hp() {
+        if (mode == ALLPASS);
+        else{
+            if (mode == ALLFAIL) hp = 0;
+            else hp--;
+            if (hp == 0) over = 2;
+        }
+    }
+
     void hit() {
         if (mode == ALLPASS);
         else {
