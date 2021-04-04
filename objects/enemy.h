@@ -69,14 +69,29 @@ public:
                 break;
             case 1:
                 bullet_types.clear();
-                bullet_types.push_back(NORMAL_DOWNRIGHT);
-                bullet_types.push_back(NORMAL_DOWNLEFT);
+                bullet_types.push_back(NORMAL_DOWNRIGHT15);
+                bullet_types.push_back(NORMAL_DOWNLEFT15);
                 break;
             case 3:
                 bullet_types.clear();
                 bullet_types.push_back(NORMAL_DOWN);
                 bullet_types.push_back(NORMAL_DOWNRIGHT);
                 bullet_types.push_back(NORMAL_DOWNLEFT);
+                break;
+            case 4:
+                bullet_types.clear();
+                bullet_types.push_back(NORMAL_DOWN);
+                bullet_types.push_back(NORMAL_DOWNRIGHT);
+                bullet_types.push_back(NORMAL_DOWNRIGHT15);
+                bullet_types.push_back(NORMAL_DOWNLEFT);
+                break;
+            case 5:
+                bullet_types.clear();
+                bullet_types.push_back(NORMAL_DOWN);
+                bullet_types.push_back(NORMAL_DOWNRIGHT);
+                bullet_types.push_back(NORMAL_DOWNRIGHT15);
+                bullet_types.push_back(NORMAL_DOWNLEFT);
+                bullet_types.push_back(NORMAL_DOWNLEFT15);
                 break;
             default:
                 bullet_types.clear();

@@ -37,20 +37,20 @@ public:
                 break;
             case 1:
                 bullet_types.clear();
-                bullet_types.push_back(NORMAL_UPRIGHT);
-                bullet_types.push_back(NORMAL_UPLEFT);
+                bullet_types.push_back(NORMAL_UPRIGHT15);
+                bullet_types.push_back(NORMAL_UPLEFT15);
                 break;
             case 2:
                 bullet_types.clear();
                 bullet_types.push_back(NORMAL_UP);
-                bullet_types.push_back(NORMAL_UPRIGHT);
-                bullet_types.push_back(NORMAL_UPLEFT);
+                bullet_types.push_back(NORMAL_UPRIGHT15);
+                bullet_types.push_back(NORMAL_UPLEFT15);
                 break;
             default:
                 bullet_types.clear();
                 bullet_types.push_back(NORMAL_UP);
-                bullet_types.push_back(NORMAL_UPRIGHT);
-                bullet_types.push_back(NORMAL_UPLEFT);
+                bullet_types.push_back(NORMAL_UPRIGHT15);
+                bullet_types.push_back(NORMAL_UPLEFT15);
                 break;
         }
         player_bullets.shoot(bullet_types, position);
