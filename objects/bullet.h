@@ -61,7 +61,7 @@ public:
                 case NORMAL_UP:
                     iter -> move_up(BULLET_SPEED);
                     if (iter -> get_position().y + BULLET_SPEED >= 0.98) {
-                        iter = bullet_list.erase(iter--);
+                        iter = bullet_list.erase(iter);
                     }
                     else {
                         iter ++;
@@ -71,7 +71,7 @@ public:
                 case NORMAL_DOWN:
                     iter -> move_down(BULLET_SPEED);
                     if (iter -> get_position().y - BULLET_SPEED <= 0.0) {
-                        iter = bullet_list.erase(iter--);
+                        iter = bullet_list.erase(iter);
                     }
                     else {
                         iter ++;
