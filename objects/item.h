@@ -1,6 +1,6 @@
 #ifndef ITEM_H
 #define ITEM_H
-#define ITEM_SPEED 0.01f
+#define ITEM_SPEED 0.002f
 #define ITEM_LENGTH 0.05f
 #include "object.h"
 #include <vector>

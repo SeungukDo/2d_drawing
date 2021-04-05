@@ -40,18 +40,38 @@ void drawFilledCircle() {
 
 void drawTri() {
 	glBegin(GL_TRIANGLES);
-	glVertex2f(-0.5, 0);
-	glVertex2f(0.5, 0);
-	glVertex2f(0, 1);
+		glVertex2f(-0.5, 0);
+		glVertex2f(0.5, 0);
+		glVertex2f(0, 1);
+	glEnd();
+}
+
+void drawRhombus() {
+	glBegin(GL_TRIANGLES);
+		glVertex2f(-0.5, 0);
+		glVertex2f(0.5, 0);
+		glVertex2f(0, 1);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+		glVertex2f(-0.5, 0);
+		glVertex2f(0.5, 0);
+		glVertex2f(0, -1);
+	glEnd();
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBegin(GL_LINES);
+		glVertex2f(-0.5, 0);
+		glVertex2f(0.5, 0);
 	glEnd();
 }
 
 void drawRect() {
 	glBegin(GL_QUADS);
-	glVertex2f(-0.5, 0);
-	glVertex2f(0.5, 0);
-	glVertex2f(0.5, 2);
-	glVertex2f(-0.5, 2);
+		glVertex2f(-0.5, 0);
+		glVertex2f(0.5, 0);
+		glVertex2f(0.5, 2);
+		glVertex2f(-0.5, 2);
 	glEnd();
 }
 
@@ -215,7 +235,7 @@ void Item(float x, float y, float length) {
 	item.child = NULL;
 	item.m = glm::translate(item.m, glm::vec3(x, y, 0.0f));
 	item.m = glm::scale(item.m, glm::vec3(length, length, 0.0f));
-	item.f = drawTri;
+	item.f = drawRhombus;
 	item.col = fillWhite;
 	item.sibling = NULL;
 

@@ -68,6 +68,7 @@ void display(void) {
         Plane(player_position.x, player_position.y, plane[2]);
 
         //player bullet
+        glColor3f(1.0f, 0.5f, 0.0f);
         player_bullet_positions = player_bullets.get_bullet_positions();
         for (i = 0; i < player_bullet_positions.size(); i++) {
             Position bullet_position = player_bullet_positions[i];
@@ -98,6 +99,7 @@ void display(void) {
         Origin();
 
         //enemy bullet
+        glColor3f(1.0f, 0.5f, 0.0f);
         enemy_bullet_positions = enemy_bullets.get_bullet_positions();
         for (i = 0; i < enemy_bullet_positions.size(); i++) {
             Position bullet_position = enemy_bullet_positions[i];
@@ -105,6 +107,7 @@ void display(void) {
         }
 
         //item
+        glColor3f(1.0f, 1.0f, 0.0f);
         item_positions = item_list.get_item_positions();
         for (i = 0; i < item_positions.size(); i++) {
             Position item_position = item_positions[i];
@@ -274,7 +277,7 @@ void timer_func(int a) {
     enemy_list.getEnemy().shoot();
     if (enemy_list.getIndex() != 0) { enemy_list.move_2(); }
 
-    glutTimerFunc(500, timer_func, 1);
+    glutTimerFunc(700, timer_func, 1);
 }
 
 int main(int argc, char** argv) {

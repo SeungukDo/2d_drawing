@@ -4,7 +4,7 @@
 #include "./bullet.h"
 #include "./item.h"
 
-class Enemy : public Object{
+class Enemy : public Object {
 private:
     int hp; // health point of enemy
     bool isRight;
@@ -62,43 +62,43 @@ public:
     }
     void shoot() {
         std::vector <BulletType> bullet_types;
-        switch (level){
-            case 0:
-                bullet_types.clear();
-                bullet_types.push_back(NORMAL_DOWN);
-                break;
-            case 1:
-                bullet_types.clear();
-                bullet_types.push_back(NORMAL_DOWNRIGHT15);
-                bullet_types.push_back(NORMAL_DOWNLEFT15);
-                break;
-            case 2:
-                bullet_types.clear();
-                bullet_types.push_back(NORMAL_DOWN);
-                bullet_types.push_back(NORMAL_DOWNRIGHT15);
-                bullet_types.push_back(NORMAL_DOWNLEFT15);
-                break;
-            case 3:
-                bullet_types.clear();
-                bullet_types.push_back(NORMAL_DOWN);
-                bullet_types.push_back(NORMAL_DOWNRIGHT);
-                bullet_types.push_back(NORMAL_DOWNRIGHT15);
-                bullet_types.push_back(NORMAL_DOWNLEFT);
-                break;
-            case 4:
-                bullet_types.clear();
-                bullet_types.push_back(NORMAL_DOWN);
-                bullet_types.push_back(NORMAL_DOWNRIGHT);
-                bullet_types.push_back(NORMAL_DOWNRIGHT15);
-                bullet_types.push_back(NORMAL_DOWNLEFT);
-                bullet_types.push_back(NORMAL_DOWNLEFT15);
-                break;
-            default:
-                bullet_types.clear();
-                bullet_types.push_back(NORMAL_DOWN);
-                bullet_types.push_back(NORMAL_DOWNRIGHT);
-                bullet_types.push_back(NORMAL_DOWNLEFT);
-                break;
+        switch (level) {
+        case 0:
+            bullet_types.clear();
+            bullet_types.push_back(NORMAL_DOWN);
+            break;
+        case 1:
+            bullet_types.clear();
+            bullet_types.push_back(NORMAL_DOWNRIGHT15);
+            bullet_types.push_back(NORMAL_DOWNLEFT15);
+            break;
+        case 2:
+            bullet_types.clear();
+            bullet_types.push_back(NORMAL_DOWN);
+            bullet_types.push_back(NORMAL_DOWNRIGHT15);
+            bullet_types.push_back(NORMAL_DOWNLEFT15);
+            break;
+        case 3:
+            bullet_types.clear();
+            bullet_types.push_back(NORMAL_DOWN);
+            bullet_types.push_back(NORMAL_DOWNRIGHT);
+            bullet_types.push_back(NORMAL_DOWNRIGHT15);
+            bullet_types.push_back(NORMAL_DOWNLEFT);
+            break;
+        case 4:
+            bullet_types.clear();
+            bullet_types.push_back(NORMAL_DOWN);
+            bullet_types.push_back(NORMAL_DOWNRIGHT);
+            bullet_types.push_back(NORMAL_DOWNRIGHT15);
+            bullet_types.push_back(NORMAL_DOWNLEFT);
+            bullet_types.push_back(NORMAL_DOWNLEFT15);
+            break;
+        default:
+            bullet_types.clear();
+            bullet_types.push_back(NORMAL_DOWN);
+            bullet_types.push_back(NORMAL_DOWNRIGHT);
+            bullet_types.push_back(NORMAL_DOWNLEFT);
+            break;
         }
         enemy_bullets.shoot(bullet_types, position);
     }
@@ -123,13 +123,13 @@ public:
     void move() { enemy_list[index].move(index); }
     void move_2() { enemy_list[index].move_2(index); }
     void decrease_hp() {
-        if (enemy_list[index].decrease_hp() == false){
+        if (enemy_list[index].decrease_hp() == false) {
             if (index + 1 == total_num) {
                 over = 1;
                 return;
             }
             item_list.create_item(enemy_list[index].get_position());
-            index++;    
+            index++;
         }
     }
 };
