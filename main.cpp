@@ -107,9 +107,9 @@ void display(void) {
         }
 
         //item
-        glColor3f(1.0f, 1.0f, 0.0f);
         item_positions = item_list.get_item_positions();
         for (i = 0; i < item_positions.size(); i++) {
+            glColor3f(1.0f, 1.0f, 0.0f);
             Position item_position = item_positions[i];
             Item(item_position.x, item_position.y, ITEM_LENGTH);
         }
