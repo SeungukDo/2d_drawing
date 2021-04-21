@@ -40,38 +40,38 @@ void drawFilledCircle() {
 
 void drawTri() {
 	glBegin(GL_TRIANGLES);
-		glVertex2f(-0.5, 0);
-		glVertex2f(0.5, 0);
-		glVertex2f(0, 1);
+		glVertex3f(-0.5, 0, 0);
+		glVertex3f(0.5, 0, 0);
+		glVertex3f(0, 1, 0);
 	glEnd();
 }
 
 void drawRhombus() {
 	glBegin(GL_TRIANGLES);
-		glVertex2f(-0.5, 0);
-		glVertex2f(0.5, 0);
-		glVertex2f(0, 1);
+		glVertex3f(-0.5, 0, 0);
+		glVertex3f(0.5, 0, 0);
+		glVertex3f(0, 1, 0);
 	glEnd();
 
 	glBegin(GL_TRIANGLES);
-		glVertex2f(-0.5, 0);
-		glVertex2f(0.5, 0);
-		glVertex2f(0, -1);
+		glVertex3f(-0.5, 0, 0);
+		glVertex3f(0.5, 0, 0);
+		glVertex3f(0, -1, 0);
 	glEnd();
 
 	glColor3f(0.0f, 0.0f, 0.0f);
 	glBegin(GL_LINES);
-		glVertex2f(-0.5, 0);
-		glVertex2f(0.5, 0);
+		glVertex3f(-0.5, 0, 0);
+		glVertex3f(0.5, 0, 0);
 	glEnd();
 }
 
 void drawRect() {
 	glBegin(GL_QUADS);
-		glVertex2f(-0.5, 0);
-		glVertex2f(0.5, 0);
-		glVertex2f(0.5, 2);
-		glVertex2f(-0.5, 2);
+		glVertex3f(-0.5, 0, 0);
+		glVertex3f(0.5, 0, 0);
+		glVertex3f(0.5, 2, 0);
+		glVertex3f(-0.5, 2, 0);
 	glEnd();
 }
 
