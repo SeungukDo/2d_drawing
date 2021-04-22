@@ -61,18 +61,23 @@ void display(void) {
 
     switch (over) {
     case 0:
-        if (line_rendering == SHOWING) {
-            glColor3f(0.0, 0.0, 0.0);
-            glBegin(GL_LINES);
-            while (iii <= 10) {
-                glVertex3f(-5, -0.1, iii);
-                glVertex3f(10, -0.1, iii);
+        glColor3f(0.0, 0.0, 0.0);
+        glBegin(GL_LINES);
+        while (iii <= 10) {
+            glVertex3f(-5, -0.1, iii);
+            glVertex3f(10, -0.1, iii);
 
-                glVertex3f(iii, -0.1, -5);
-                glVertex3f(iii, -0.1, 10);
-                iii += 0.15;
-            }
-            glEnd();
+            glVertex3f(iii, -0.1, -5);
+            glVertex3f(iii, -0.1, 10);
+            iii += 0.15;
+        }
+        glEnd();
+        
+        if (line_rendering == HIDING) {
+            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+        }
+        else {
+            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         }
 
         // Planet #1
@@ -195,6 +200,7 @@ void display(void) {
         }
         glLoadIdentity();
         gluLookAt(player_position.x, 0.7, player_position.y - 2.0, player_position.x, -0.05, player_position.y + 1, 0, 1, 0);
+
         break;
 
     case 1:
@@ -285,36 +291,37 @@ void reshape(int w, int h) {
 void keyboard(unsigned char key, int x, int y) {
 
     switch (key) {
-    case 'i':
-        player.move_up(0.01);
-        break;
-    case 'm':
-        player.move_down(0.01);
-        break;
-    case 'k':
-        player.move_right(0.01);
-        break;
-    case 'j':
-        player.move_left(0.01);
-        break;
-    case 'c':
-        if (mode == ALLPASS) mode = NORMAL;
-        else mode = ALLPASS;
-        break;
-    case 'f':
-        if (mode == ALLFAIL) mode = NORMAL;
-        else mode = ALLFAIL;
-        break;
-    case 'v':
-        view_change();
-        break;
-    case 'r':
-        if (line_rendering == SHOWING) line_rendering = HIDING;
-        else line_rendering = SHOWING;
-        break;
-    case 32:  //space bar
-        player.shoot();
-        break;
+        case 'i':
+            player.move_up(0.01);
+            break;
+        case 'm':
+            player.move_down(0.01);
+            break;
+        case 'k':
+            player.move_right(0.01);
+            break;
+        case 'j':
+            player.move_left(0.01);
+            break;
+        case 'c':
+            if (mode == ALLPASS) mode = NORMAL;
+            else mode = ALLPASS;
+            break;
+        case 'f':
+            if (mode == ALLFAIL) mode = NORMAL;
+            else mode = ALLFAIL;
+            break;
+        case 'v':
+            printf("keyboard v\n");
+            view_change();
+            break;
+        case 'r':
+            if (line_rendering == SHOWING) line_rendering = HIDING;
+            else line_rendering = SHOWING;
+            break;
+        case 32:  //space bar
+            player.shoot();
+            break;
     }
     glutPostRedisplay();
 }
