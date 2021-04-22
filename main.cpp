@@ -18,6 +18,7 @@ BulletList player_bullets = BulletList(PLAYER);
 BulletList enemy_bullets = BulletList(ENEMY);
 ItemList item_list = ItemList();
 Gamemode mode = NORMAL;
+LineRendering line_rendering = SHOWING;
 float planet[5] = { 0.3f, 0.3f, 0.1f, 0.1f, 0.0f };
 float planet2[5] = { 0.8f, 0.9f, 0.05f, 0.05f, 0.0f };
 
@@ -60,17 +61,19 @@ void display(void) {
 
     switch (over) {
     case 0:
-        glColor3f(0.0, 0.0, 0.0);
-        glBegin(GL_LINES);
-        while (iii <= 10) {
-            glVertex3f(-5, -0.1, iii);
-            glVertex3f(10, -0.1, iii);
+        if (line_rendering == SHOWING) {
+            glColor3f(0.0, 0.0, 0.0);
+            glBegin(GL_LINES);
+            while (iii <= 10) {
+                glVertex3f(-5, -0.1, iii);
+                glVertex3f(10, -0.1, iii);
 
-            glVertex3f(iii, -0.1, -5);
-            glVertex3f(iii, -0.1, 10);
-            iii += 0.15;
+                glVertex3f(iii, -0.1, -5);
+                glVertex3f(iii, -0.1, 10);
+                iii += 0.15;
+            }
+            glEnd();
         }
-        glEnd();
 
         // Planet #1
         glPushMatrix();
@@ -304,6 +307,10 @@ void keyboard(unsigned char key, int x, int y) {
         break;
     case 'v':
         view_change();
+        break;
+    case 'r':
+        if (line_rendering == SHOWING) line_rendering = HIDING;
+        else line_rendering = SHOWING;
         break;
     case 32:  //space bar
         player.shoot();
