@@ -118,12 +118,6 @@ void draw_cuboid(float length, float width, float height) {
 void draw_aircraft() {
 	glColor3f(0.0, 1.0, 0.0);
 	draw_cuboid(1.0, 1.0, 1.5);	//body
-
-	glColor3f(0.0, 0.0, 1.0);
-	glPushMatrix();	//head
-		glTranslatef(0.0, 0.0, 1.5);
-		draw_pyramid(1.0, 1.0, 1.5);
-	glPopMatrix();
 	glColor3f(0.0, 1.0, 0.0);
 	glPushMatrix();	//right up wing
 		glTranslatef(1.5, 1.0, 0.0);
@@ -144,5 +138,10 @@ void draw_aircraft() {
 			glRotatef(50, 0.0, 0.0, 1.0);
 			draw_cuboid(0.5, 0.1, 1.5);
 		glPopMatrix();
+	glPopMatrix();
+	glColor3f(0.0, 0.0, 1.0);
+	glPushMatrix();	//head
+		glTranslatef(0.0, 0.0, 1.5);
+		draw_pyramid(1.0, 1.0, 1.5);
 	glPopMatrix();
 }
