@@ -74,10 +74,10 @@ void display(void) {
         glEnd();
         
         if (line_rendering == HIDING) {
-            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
         }
         else {
-            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
         }
 
         // Planet #1
