@@ -1,6 +1,6 @@
 #ifndef BULLET_H
 #define BULLET_H
-#define BULLET_RADIUS 0.015f
+#define BULLET_RADIUS 0.05f
 #define BULLET_SPEED 0.0075f
 #include "./object.h"
 
@@ -60,7 +60,7 @@ public:
             switch (d) {
             case NORMAL_UP:
                 iter->move_up(BULLET_SPEED);
-                if (iter->get_position().y + BULLET_SPEED >= 0.98) {
+                if (iter->get_position().y + BULLET_SPEED >= 4.95) {
                     iter = bullet_list.erase(iter);
                 }
                 else {
@@ -70,7 +70,7 @@ public:
 
             case NORMAL_DOWN:
                 iter->move_down(BULLET_SPEED);
-                if (iter->get_position().y - BULLET_SPEED <= 0.0) {
+                if (iter->get_position().y - BULLET_SPEED <= 0.05) {
                     iter = bullet_list.erase(iter);
                 }
                 else {
@@ -81,10 +81,10 @@ public:
             case NORMAL_UPRIGHT:
                 iter->move_up(BULLET_SPEED * cos(45 * (PI / 180)));
                 iter->move_right(BULLET_SPEED * cos(45 * (PI / 180)));
-                if (iter->get_position().y + BULLET_SPEED >= 0.98) {
+                if (iter->get_position().y + BULLET_SPEED >= 4.95) {
                     iter = bullet_list.erase(iter);
                 }
-                else if (iter->get_position().x + BULLET_SPEED >= 0.98) {
+                else if (iter->get_position().x + BULLET_SPEED >= 4.95) {
                     iter = bullet_list.erase(iter);
                 }
                 else {
@@ -95,10 +95,10 @@ public:
             case NORMAL_UPRIGHT15:
                 iter->move_up(BULLET_SPEED * cos(15 * (PI / 180)));
                 iter->move_right(BULLET_SPEED * sin(15 * (PI / 180)));
-                if (iter->get_position().y + BULLET_SPEED >= 0.98) {
+                if (iter->get_position().y + BULLET_SPEED >= 4.95) {
                     iter = bullet_list.erase(iter);
                 }
-                else if (iter->get_position().x + BULLET_SPEED >= 0.98) {
+                else if (iter->get_position().x + BULLET_SPEED >= 4.95) {
                     iter = bullet_list.erase(iter);
                 }
                 else {
@@ -109,10 +109,10 @@ public:
             case NORMAL_UPLEFT:
                 iter->move_up(BULLET_SPEED * cos(45 * (PI / 180)));
                 iter->move_left(BULLET_SPEED * cos(45 * (PI / 180)));
-                if (iter->get_position().y + BULLET_SPEED >= 0.98) {
+                if (iter->get_position().y + BULLET_SPEED >= 4.95) {
                     iter = bullet_list.erase(iter);
                 }
-                else if (iter->get_position().x - BULLET_SPEED <= 0.0) {
+                else if (iter->get_position().x - BULLET_SPEED <= 0.05) {
                     iter = bullet_list.erase(iter);
                 }
                 else {
@@ -123,11 +123,11 @@ public:
             case NORMAL_UPLEFT15:
                 iter->move_up(BULLET_SPEED * cos(15 * (PI / 180)));
                 iter->move_left(BULLET_SPEED * sin(15 * (PI / 180)));
-                if (iter->get_position().y + BULLET_SPEED >= 0.98) {
+                if (iter->get_position().y + BULLET_SPEED >= 4.95) {
                     iter = bullet_list.erase(iter);
                     return;
                 }
-                else if (iter->get_position().x - BULLET_SPEED <= 0.0) {
+                else if (iter->get_position().x - BULLET_SPEED <= 0.05) {
                     iter = bullet_list.erase(iter);
                     return;
                 }
@@ -139,10 +139,10 @@ public:
             case NORMAL_DOWNRIGHT:
                 iter->move_down(BULLET_SPEED * cos(45 * (PI / 180)));
                 iter->move_right(BULLET_SPEED * cos(45 * (PI / 180)));
-                if (iter->get_position().y - BULLET_SPEED <= 0.0) {
+                if (iter->get_position().y - BULLET_SPEED <= 0.05) {
                     iter = bullet_list.erase(iter);
                 }
-                else if (iter->get_position().x + BULLET_SPEED >= 0.98) {
+                else if (iter->get_position().x + BULLET_SPEED >= 4.95) {
                     iter = bullet_list.erase(iter);
                 }
                 else {
@@ -153,11 +153,11 @@ public:
             case NORMAL_DOWNRIGHT15:
                 iter->move_down(BULLET_SPEED * cos(15 * (PI / 180)));
                 iter->move_right(BULLET_SPEED * sin(15 * (PI / 180)));
-                if (iter->get_position().y - BULLET_SPEED <= 0.0) {
+                if (iter->get_position().y - BULLET_SPEED <= 0.05) {
                     iter = bullet_list.erase(iter);
                     return;
                 }
-                else if (iter->get_position().x + BULLET_SPEED >= 0.98) {
+                else if (iter->get_position().x + BULLET_SPEED >= 4.95) {
                     iter = bullet_list.erase(iter);
                     return;
                 }
@@ -169,10 +169,10 @@ public:
             case NORMAL_DOWNLEFT:
                 iter->move_down(BULLET_SPEED * cos(45 * (PI / 180)));
                 iter->move_left(BULLET_SPEED * cos(45 * (PI / 180)));
-                if (iter->get_position().y - BULLET_SPEED <= 0.0) {
+                if (iter->get_position().y - BULLET_SPEED <= 0.05) {
                     iter = bullet_list.erase(iter);
                 }
-                else if (iter->get_position().x - BULLET_SPEED <= 0.0) {
+                else if (iter->get_position().x - BULLET_SPEED <= 0.05) {
                     iter = bullet_list.erase(iter);
                 }
                 else {
@@ -183,11 +183,11 @@ public:
             case NORMAL_DOWNLEFT15:
                 iter->move_down(BULLET_SPEED * cos(15 * (PI / 180)));
                 iter->move_left(BULLET_SPEED * sin(15 * (PI / 180)));
-                if (iter->get_position().y - BULLET_SPEED <= 0.0) {
+                if (iter->get_position().y - BULLET_SPEED <= 0.05) {
                     iter = bullet_list.erase(iter);
                     return;
                 }
-                else if (iter->get_position().x + BULLET_SPEED <= 0.0) {
+                else if (iter->get_position().x + BULLET_SPEED <= 0.05) {
                     iter = bullet_list.erase(iter);
                     return;
                 }

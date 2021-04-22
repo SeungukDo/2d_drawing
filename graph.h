@@ -216,7 +216,7 @@ void Plane(float x, float y, float theta) {
 	traverse(&head);
 }
 
-void Bullet(float x, float y, float radius){
+void Bullet_(float x, float y, float radius){
 	treenode bullet;
 
 	bullet.child = NULL;

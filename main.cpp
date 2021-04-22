@@ -18,7 +18,6 @@ BulletList player_bullets = BulletList(PLAYER);
 BulletList enemy_bullets = BulletList(ENEMY);
 ItemList item_list = ItemList();
 Gamemode mode = NORMAL;
-LineRendering line_rendering = SHOWING;
 float planet[5] = { 0.3f, 0.3f, 0.1f, 0.1f, 0.0f };
 float planet2[5] = { 0.8f, 0.9f, 0.05f, 0.05f, 0.0f };
 
@@ -62,19 +61,16 @@ void display(void) {
     switch (over) {
     case 0:
         glColor3f(0.0, 0.0, 0.0);
-        
-        if (line_rendering == SHOWING) { 
-            glBegin(GL_LINES);
-            while (iii <= 10) {
-                glVertex3f(-5, -0.1, iii);
-                glVertex3f(10, -0.1, iii);
+        glBegin(GL_LINES);
+        while (iii <= 10) {
+            glVertex3f(-5, -0.1, iii);
+            glVertex3f(10, -0.1, iii);
 
-                glVertex3f(iii, -0.1, -5);
-                glVertex3f(iii, -0.1, 10);
-                iii += 0.15;
-            }
-            glEnd();
+            glVertex3f(iii, -0.1, -5);
+            glVertex3f(iii, -0.1, 10);
+            iii += 0.15;
         }
+        glEnd();
 
         // Planet #1
         glPushMatrix();
@@ -134,14 +130,17 @@ void display(void) {
             draw_aircraft();
         glPopMatrix();
        
-        //player bullet
-        //glColor3f(1.0f, 0.5f, 0.0f);
-
-        /*player_bullet_positions = player_bullets.get_bullet_positions();
+        // player bullet
+        glColor3f(1.0f, 0.5f, 0.0f);
+        player_bullet_positions = player_bullets.get_bullet_positions();
         for (i = 0; i < player_bullet_positions.size(); i++) {
             Position bullet_position = player_bullet_positions[i];
-            Bullet(bullet_position.x, bullet_position.y, BULLET_RADIUS);
-        }*/
+            glPushMatrix();
+                glTranslatef(bullet_position.x, 0.0, bullet_position.y);
+                glutSolidSphere(BULLET_RADIUS, 50, 50);
+            glPopMatrix();
+            //Bullet_(bullet_position.x, bullet_position.y, BULLET_RADIUS);
+        }
 
         //enemy
         /*switch (enemy_list.getIndex()) {
@@ -164,107 +163,109 @@ void display(void) {
 
         // Enemy
         glPushMatrix();
-            //glTranslatef(enemy_position.x, 0.0, 10.0);
-        glTranslatef(enemy_position.x, 0.0, 5.0);
+            glTranslatef(enemy_position.x, 0.0, enemy_position.y);
             glRotatef(180, 0, 1, 0);
             glScalef(0.1, 0.1, 0.1);
             draw_aircraft();
         glPopMatrix();
 
-        //Rotatete();
-        //Plane(-enemy_position.x, -enemy_position.y, 220 - plane[2]);
-        //Origin();
-
         //enemy bullet
-        //glColor3f(1.0f, 0.5f, 0.0f);
-        /*enemy_bullet_positions = enemy_bullets.get_bullet_positions();
+        glColor3f(1.0f, 0.5f, 1.0f);
+        enemy_bullet_positions = enemy_bullets.get_bullet_positions();
         for (i = 0; i < enemy_bullet_positions.size(); i++) {
             Position bullet_position = enemy_bullet_positions[i];
-            Bullet(bullet_position.x, bullet_position.y, BULLET_RADIUS);
-        }*/
+            glPushMatrix();
+                glTranslatef(bullet_position.x, 0.0, bullet_position.y);
+                glutSolidSphere(BULLET_RADIUS, 50, 50);
+            glPopMatrix();
+        }
 
         //item
-        /*item_positions = item_list.get_item_positions();
+        item_positions = item_list.get_item_positions();
         for (i = 0; i < item_positions.size(); i++) {
-            glColor3f(1.0f, 1.0f, 0.0f);
+            glColor3f(0.1f, 0.1f, 0.1f);
             Position item_position = item_positions[i];
-            Item(item_position.x, item_position.y, ITEM_LENGTH);
-        }*/
-
+            glPushMatrix();
+                glTranslatef(item_position.x, 0.0, item_position.y);
+                glutSolidSphere(ITEM_LENGTH, 50, 50);
+            glPopMatrix();
+        }
+        glLoadIdentity();
+        gluLookAt(player_position.x, 0.7, player_position.y - 2.0, player_position.x, -0.05, player_position.y + 1, 0, 1, 0);
         break;
 
-    case 1: {
+    case 1:
         glLoadIdentity();
-        glColor3f(1.0, 1.0, 1.0);
+        glColor3f(0.0, 0.0, 0.0);
         glBegin(GL_LINE_STRIP);             // W
-        glVertex2f(0.3, 0.6);
-        glVertex2f(0.325, 0.5);
-        glVertex2f(0.35, 0.6);
-        glVertex2f(0.375, 0.5);
-        glVertex2f(0.4, 0.6);
+        glVertex3f(0.3, 0.0, 0.6);
+        glVertex3f(0.325, 0.0, 0.5);
+        glVertex3f(0.35, 0.0, 0.6);
+        glVertex3f(0.375, 0.0, 0.5);
+        glVertex3f(0.4, 0.0, 0.6);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // I
-        glVertex2f(0.5, 0.6);
-        glVertex2f(0.5, 0.5);
+        glVertex3f(0.5, 0.0, 0.6);
+        glVertex3f(0.5, 0.0, 0.5);
         glEnd();
         glBegin(GL_LINE_STRIP);
-        glVertex2f(0.475, 0.6);
-        glVertex2f(0.525, 0.6);
+        glVertex3f(0.475, 0.0, 0.6);
+        glVertex3f(0.525, 0.0, 0.6);
         glEnd();
         glBegin(GL_LINE_STRIP);
-        glVertex2f(0.475, 0.5);
-        glVertex2f(0.525, 0.5);
+        glVertex3f(0.475, 0.0, 0.5);
+        glVertex3f(0.525, 0.0, 0.5);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // N
-        glVertex2f(0.6, 0.5);
-        glVertex2f(0.6, 0.6);
-        glVertex2f(0.675, 0.5);
-        glVertex2f(0.675, 0.6);
+        glVertex3f(0.6, 0.0, 0.5);
+        glVertex3f(0.6, 0.0, 0.6);
+        glVertex3f(0.675, 0.0, 0.5);
+        glVertex3f(0.675, 0.0, 0.6);
         glEnd();
-        break; }
-    case 2: {
+        break;
+    case 2:
         glLoadIdentity();
-        glColor3f(1.0, 1.0, 1.0);
+        glColor3f(0.0, 0.0, 0.0);
         glBegin(GL_LINE_STRIP);             // L
-        glVertex2f(0.25, 0.6);
-        glVertex2f(0.25, 0.5);
-        glVertex2f(0.325, 0.5);
+        glVertex3f(0.25, 0.0, 0.6);
+        glVertex3f(0.25, 0.0, 0.5);
+        glVertex3f(0.325, 0.0, 0.5);
         glEnd();
 
         glBegin(GL_LINE_LOOP);              // O
-        glVertex2f(0.4, 0.6);
-        glVertex2f(0.4, 0.5);
-        glVertex2f(0.475, 0.5);
-        glVertex2f(0.475, 0.6);
+        glVertex3f(0.4, 0.0, 0.6);
+        glVertex3f(0.4, 0.0, 0.5);
+        glVertex3f(0.475, 0.0, 0.5);
+        glVertex3f(0.475, 0.0, 0.6);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // S
-        glVertex2f(0.625, 0.6);
-        glVertex2f(0.55, 0.6);
-        glVertex2f(0.55, 0.55);
-        glVertex2f(0.625, 0.55);
-        glVertex2f(0.625, 0.5);
-        glVertex2f(0.55, 0.5);
+        glVertex3f(0.625, 0.0, 0.6);
+        glVertex3f(0.55, 0.0, 0.6);
+        glVertex3f(0.55, 0.0, 0.55);
+        glVertex3f(0.625, 0.0, 0.55);
+        glVertex3f(0.625, 0.0, 0.5);
+        glVertex3f(0.55, 0.0, 0.5);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // E
-        glVertex2f(0.775, 0.6);
-        glVertex2f(0.7, 0.6);
-        glVertex2f(0.7, 0.5);
-        glVertex2f(0.775, 0.5);
+        glVertex3f(0.775, 0.0, 0.6);
+        glVertex3f(0.7, 0.0, 0.6);
+        glVertex3f(0.7, 0.0, 0.5);
+        glVertex3f(0.775, 0.0, 0.5);
         glEnd();
 
         glBegin(GL_LINES);
-        glVertex2f(0.7, 0.55);
-        glVertex2f(0.775, 0.55);
+        glVertex3f(0.7, 0.0, 0.55);
+        glVertex3f(0.775, 0.0, 0.55);
         glEnd();
         break;
     }
-    }
-    glLoadIdentity();
-    gluLookAt(player_position.x, 0.7, player_position.y - 2.0, player_position.x, -0.05, player_position.y + 1, 0, 1, 0);
+    //glLoadIdentity();
+    //gluLookAt(player_position.x, 0.7, player_position.y - 2.0, player_position.x, -0.05, player_position.y + 1, 0, 1, 0);
+    //gluLookAt(player_position.x, 5.0, player_position.y, player_position.x, -0.05, player_position.y, 0, 0, 1);
     glTranslatef(0.0, 0.0, -1.0);
     
     glutSwapBuffers();
@@ -276,8 +277,6 @@ void reshape(int w, int h) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glFrustum(-0.5, 0.5, -0.5 * (GLfloat)h / (GLfloat)w, 0.5 * (GLfloat)h / (GLfloat)w, 0.5, 7.0);
-    //glTranslatef(0, 0, -5.0);
-    //glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 }
 
 void keyboard(unsigned char key, int x, int y) {
@@ -305,10 +304,6 @@ void keyboard(unsigned char key, int x, int y) {
         break;
     case 'v':
         view_change();
-        break;
-    case 'r':
-        if (line_rendering == SHOWING) line_rendering = HIDING;
-        else line_rendering = SHOWING;
         break;
     case 32:  //space bar
         player.shoot();
@@ -345,7 +340,7 @@ void idle_func() {
     planet[4] += 0.5;
     planet2[4] += 1;
 
-    if (plane_rotate == true)
+    /*if (plane_rotate == true)
         plane[2] -= 0.2;
     else
         plane[2] += 0.2;
@@ -353,7 +348,7 @@ void idle_func() {
     if (plane[2] > 120)
         plane_rotate = true;
     if (plane[2] < 100)
-        plane_rotate = false;
+        plane_rotate = false;*/
 
     check_hit();
     check_get_item();
@@ -365,7 +360,7 @@ void timer_func(int a) {
     enemy_list.getEnemy().shoot();
     if (enemy_list.getIndex() != 0) { enemy_list.move_2(); }
 
-    glutTimerFunc(700, timer_func, 1);
+    glutTimerFunc(1300, timer_func, 1);
 }
 
 int main(int argc, char** argv) {
@@ -382,7 +377,7 @@ int main(int argc, char** argv) {
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(specialkeyboard);
     glutIdleFunc(idle_func);
-    //glutTimerFunc(700, timer_func, 1);            // Enemy shoots every 500ms
+    glutTimerFunc(700, timer_func, 1);            // Enemy shoots every 500ms
 
     glutMainLoop();
     return 0;

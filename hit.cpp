@@ -59,13 +59,13 @@ bool is_in_hitbox(Position bullet_position, Position plane_position, Direction p
   float ty = plane_position.y;
 
   if (plane_direction == UP &&
-      bx - BULLET_RADIUS <= tx + 2.8 * 0.05 && bx + BULLET_RADIUS >= tx - 2.8 * 0.05 && 
-      by - BULLET_RADIUS <= ty && by + BULLET_RADIUS >= ty - 2 * 0.05)
+      bx - BULLET_RADIUS <= tx + 2.8 * 0.13 && bx + BULLET_RADIUS >= tx - 2.8 * 0.13 &&
+      by - BULLET_RADIUS <= ty + 2.8 * 0.08 && by + BULLET_RADIUS >= ty - 2.8 * 0.08)
       result = true;
   
   else if (plane_direction == DOWN &&
-      bx - BULLET_RADIUS <= tx + 2.8 * 0.05 && bx + BULLET_RADIUS >= tx - 2.8 * 0.05 && 
-      by + BULLET_RADIUS >= ty && by - BULLET_RADIUS >= ty + 2 * 0.05)
+      bx - BULLET_RADIUS <= tx + 2.8 * 0.13 && bx + BULLET_RADIUS >= tx - 2.8 * 0.13 && 
+      by + BULLET_RADIUS >= ty - 2.8 * 0.08 && by - BULLET_RADIUS <= ty + 2.8 * 0.08)
       result = true;
   
   return result;

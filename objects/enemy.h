@@ -16,7 +16,7 @@ public:
         isRight = true;
         level = _level;
         position.x = 0.5f;
-        position.y = 0.85f;
+        position.y = 4.5f;
     };
     int getHP() { return hp; }
     bool decrease_hp() {

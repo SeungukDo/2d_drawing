@@ -7,11 +7,5 @@ enum Gamemode {
 	ALLFAIL,
 };
 
-enum LineRendering {
-	SHOWING,
-	HIDING
-};
-
 extern Gamemode mode;
-extern LineRendering line_rendering;
 #endif

@@ -11,7 +11,7 @@ public:
     Player() {
         hp = 3;
         item = 0;
-        position.x = 0.0;
+        position.x = 2.5;
         position.y = 0.0;
     };
 
