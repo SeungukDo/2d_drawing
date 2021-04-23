@@ -1,6 +1,5 @@
 #define GL_SILENCE_DEPRECATION
 #include <GL/freeglut.h>
-//#include <OpenGL/gl.h>
 #include <vector>
 #include "objects/player.h"
 #include "objects/enemy.h"
@@ -8,7 +7,6 @@
 #include "objects/item.h"
 #include "aircraft.hpp"
 #include "mode.h"
-#include "graph.h"
 #include "hit.h"
 #include "view.h"
 
@@ -18,12 +16,10 @@ BulletList player_bullets = BulletList(PLAYER);
 BulletList enemy_bullets = BulletList(ENEMY);
 ItemList item_list = ItemList();
 Gamemode mode = NORMAL;
-LineRendering line_rendering = SHOWING;
-float planet[5] = { 0.3f, 0.3f, 0.1f, 0.1f, 0.0f };
-float planet2[5] = { 0.8f, 0.9f, 0.05f, 0.05f, 0.0f };
+LineRendering line_rendering = HIDING;
+float planet = 0.0f;
+float planet2 = 0.0f;
 
-float plane[3] = { 0.5f, 0.15f, 130.0f };
-bool plane_rotate = true;
 Viewmode view = TPS;
 int over = 0;
 
@@ -31,24 +27,12 @@ void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
-
-    //glMatrixMode(GL_PROJECTION);
-    //glLoadIdentity();
-    //glFrustum(-4.0, 4.0, -4.0, 4.0, 1.0, 10.0);
-    /*
-    player.x = 0.01;
-    player.y = 0.01;
-    player.width = 0.15;
-    player.height = 0.18;
-    */
 }
 
 void display(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
     glMatrixMode(GL_MODELVIEW);
-    glColor3f(1.0, 1.0, 1.0);
     
     Position player_position = player.get_position();
     Position enemy_position = enemy_list.getEnemy().get_position();
@@ -58,9 +42,11 @@ void display(void) {
 
     float iii = -5;
     int i;
-
+    
     switch (over) {
     case 0:
+
+        // Grid
         glColor3f(0.0, 0.0, 0.0);
         glBegin(GL_LINES);
         while (iii <= 10) {
@@ -87,13 +73,13 @@ void display(void) {
             glutSolidSphere(1, 100, 100);
 
             glColor3f(0.5, 0.0, 0.0);
-            glRotatef(planet[4], 0, 1, 0);
+            glRotatef(planet, 0, 1, 0);
             glTranslatef(1.5, 0.0, 1.5);
             glScalef(0.3, 0.3, 0.3);
             glutSolidSphere(1, 100, 100);
 
             glColor3f(0.0, 0.5, 0.0);
-            glRotatef(planet[4] * 2, 0, 1, 0);
+            glRotatef(planet * 2, 0, 1, 0);
             glTranslatef(1.5, 0.0, 1.5);
             glScalef(0.3, 0.3, 0.3);
             glutSolidSphere(1, 100, 100);
@@ -106,39 +92,38 @@ void display(void) {
             glutSolidSphere(0.6, 100, 100);
 
             glColor3f(0.0, 0.8, 0.4);
-            glRotatef(planet2[4], 0, 1, 0);
+            glRotatef(planet2, 0, 1, 0);
             glTranslatef(1.0, 0.0, 1.0);
             glScalef(0.3, 0.3, 0.3);
             glutSolidSphere(1, 100, 100);
 
             glColor3f(0.5, 0.5, 0.5);
-            glRotatef(planet[4] * 2, 0, 1, 0);
+            glRotatef(planet * 2, 0, 1, 0);
             glTranslatef(1.0, 0.0, 1.0);
             glScalef(0.3, 0.3, 0.3);
             glutSolidSphere(1, 100, 100);
         glPopMatrix();
 
-        //player
-        /*switch (player.getHP()) {
+        // Player
+        switch (player.getHP()) {
         case 3:
             glColor3f(0, 1.0, 0);
             break;
         case 2:
-            glColor3f(1.0, 1.0, 0);
+            glColor3f(0.2, 0.8, 0.8);
             break;
         case 1:
-            glColor3f(1.0, 0, 0);
+            glColor3f(0.0, 0.0, 1.0);
             break;
-        }*/
+        }
 
-        // Player
         glPushMatrix();
             glTranslatef(player_position.x, 0, player_position.y);
             glScalef(0.1, 0.1, 0.1);
             draw_aircraft();
         glPopMatrix();
        
-        // player bullet
+        // Player Bullet
         glColor3f(1.0f, 0.5f, 0.0f);
         player_bullet_positions = player_bullets.get_bullet_positions();
         for (i = 0; i < player_bullet_positions.size(); i++) {
@@ -147,29 +132,27 @@ void display(void) {
                 glTranslatef(bullet_position.x, 0.0, bullet_position.y);
                 glutSolidSphere(BULLET_RADIUS, 50, 50);
             glPopMatrix();
-            //Bullet_(bullet_position.x, bullet_position.y, BULLET_RADIUS);
         }
 
-        //enemy
-        /*switch (enemy_list.getIndex()) {
+        // Enemy
+        switch (enemy_list.getIndex()) {
         case 0:
-            glColor3f(1.0, 0, 0);
+            glColor3f(1.0, 1.0, 0);
             break;
         case 1:
             glColor3f(1.0, 0.5, 0);
             break;
         case 2:
-            glColor3f(1.0, 1.0, 0);
+            glColor3f(1.0, 0.0, 0);
             break;
         case 3:
-            glColor3f(0, 1.0, 0);
+            glColor3f(0.8, 0.2, 0.8);
             break;
         case 4:
-            glColor3f(0, 0, 1.0);
+            glColor3f(0.35, 0.2, 0.8);
             break;
-        }*/
+        }
 
-        // Enemy
         glPushMatrix();
             glTranslatef(enemy_position.x, 0.0, enemy_position.y);
             glRotatef(180, 0, 1, 0);
@@ -177,7 +160,7 @@ void display(void) {
             draw_aircraft();
         glPopMatrix();
 
-        //enemy bullet
+        // Enemy Bullet
         glColor3f(1.0f, 0.5f, 1.0f);
         enemy_bullet_positions = enemy_bullets.get_bullet_positions();
         for (i = 0; i < enemy_bullet_positions.size(); i++) {
@@ -188,7 +171,7 @@ void display(void) {
             glPopMatrix();
         }
 
-        //item
+        // Item
         item_positions = item_list.get_item_positions();
         for (i = 0; i < item_positions.size(); i++) {
             glColor3f(0.1f, 0.1f, 0.1f);
@@ -204,77 +187,92 @@ void display(void) {
         break;
 
     case 1:
-        glLoadIdentity();
         glColor3f(0.0, 0.0, 0.0);
+
+        glPushMatrix();
+        glTranslatef(3.0, 0.0, 3.0);
+        glRotatef(180.0, 0.0, 0.0, 1.0);
+
         glBegin(GL_LINE_STRIP);             // W
-        glVertex3f(0.3, 0.0, 0.6);
-        glVertex3f(0.325, 0.0, 0.5);
-        glVertex3f(0.35, 0.0, 0.6);
-        glVertex3f(0.375, 0.0, 0.5);
-        glVertex3f(0.4, 0.0, 0.6);
+            glVertex3f(0.3, 0.0, 0.6);
+            glVertex3f(0.325, 0.0, 0.5);
+            glVertex3f(0.35, 0.0, 0.6);
+            glVertex3f(0.375, 0.0, 0.5);
+            glVertex3f(0.4, 0.0, 0.6);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // I
-        glVertex3f(0.5, 0.0, 0.6);
-        glVertex3f(0.5, 0.0, 0.5);
+            glVertex3f(0.5, 0.0, 0.6);
+            glVertex3f(0.5, 0.0, 0.5);
         glEnd();
         glBegin(GL_LINE_STRIP);
-        glVertex3f(0.475, 0.0, 0.6);
-        glVertex3f(0.525, 0.0, 0.6);
+            glVertex3f(0.475, 0.0, 0.6);
+            glVertex3f(0.525, 0.0, 0.6);
         glEnd();
         glBegin(GL_LINE_STRIP);
-        glVertex3f(0.475, 0.0, 0.5);
-        glVertex3f(0.525, 0.0, 0.5);
+            glVertex3f(0.475, 0.0, 0.5);
+            glVertex3f(0.525, 0.0, 0.5);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // N
-        glVertex3f(0.6, 0.0, 0.5);
-        glVertex3f(0.6, 0.0, 0.6);
-        glVertex3f(0.675, 0.0, 0.5);
-        glVertex3f(0.675, 0.0, 0.6);
+            glVertex3f(0.6, 0.0, 0.5);
+            glVertex3f(0.6, 0.0, 0.6);
+            glVertex3f(0.675, 0.0, 0.5);
+            glVertex3f(0.675, 0.0, 0.6);
         glEnd();
+        glPopMatrix();
+
+        glLoadIdentity();
+        gluLookAt(2.5, 0.57, 2.5, 2.5, -0.05, 2.5, 0, 0, 1);
         break;
     case 2:
-        glLoadIdentity();
         glColor3f(0.0, 0.0, 0.0);
+
+        glPushMatrix();
+        glTranslatef(3.0, 0.0, 3.0);
+        glRotatef(180.0, 0.0, 0.0, 1.0);
+
         glBegin(GL_LINE_STRIP);             // L
-        glVertex3f(0.25, 0.0, 0.6);
-        glVertex3f(0.25, 0.0, 0.5);
-        glVertex3f(0.325, 0.0, 0.5);
+            glVertex3f(0.25, 0.0, 0.6);
+            glVertex3f(0.25, 0.0, 0.5);
+            glVertex3f(0.325, 0.0, 0.5);
         glEnd();
 
         glBegin(GL_LINE_LOOP);              // O
-        glVertex3f(0.4, 0.0, 0.6);
-        glVertex3f(0.4, 0.0, 0.5);
-        glVertex3f(0.475, 0.0, 0.5);
-        glVertex3f(0.475, 0.0, 0.6);
+            glVertex3f(0.4, 0.0, 0.6);
+            glVertex3f(0.4, 0.0, 0.5);
+            glVertex3f(0.475, 0.0, 0.5);
+            glVertex3f(0.475, 0.0, 0.6);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // S
-        glVertex3f(0.625, 0.0, 0.6);
-        glVertex3f(0.55, 0.0, 0.6);
-        glVertex3f(0.55, 0.0, 0.55);
-        glVertex3f(0.625, 0.0, 0.55);
-        glVertex3f(0.625, 0.0, 0.5);
-        glVertex3f(0.55, 0.0, 0.5);
+            glVertex3f(0.625, 0.0, 0.6);
+            glVertex3f(0.55, 0.0, 0.6);
+            glVertex3f(0.55, 0.0, 0.55);
+            glVertex3f(0.625, 0.0, 0.55);
+            glVertex3f(0.625, 0.0, 0.5);
+            glVertex3f(0.55, 0.0, 0.5);
         glEnd();
 
         glBegin(GL_LINE_STRIP);             // E
-        glVertex3f(0.775, 0.0, 0.6);
-        glVertex3f(0.7, 0.0, 0.6);
-        glVertex3f(0.7, 0.0, 0.5);
-        glVertex3f(0.775, 0.0, 0.5);
+            glVertex3f(0.775, 0.0, 0.6);
+            glVertex3f(0.7, 0.0, 0.6);
+            glVertex3f(0.7, 0.0, 0.5);
+            glVertex3f(0.775, 0.0, 0.5);
         glEnd();
 
         glBegin(GL_LINES);
-        glVertex3f(0.7, 0.0, 0.55);
-        glVertex3f(0.775, 0.0, 0.55);
+            glVertex3f(0.7, 0.0, 0.55);
+            glVertex3f(0.775, 0.0, 0.55);
         glEnd();
+
+        glPopMatrix();
+
+        glLoadIdentity();
+        gluLookAt(2.5, 0.57, 2.5, 2.5, -0.05, 2.5, 0, 0, 1);
         break;
     }
-    //glLoadIdentity();
-    //gluLookAt(player_position.x, 0.7, player_position.y - 2.0, player_position.x, -0.05, player_position.y + 1, 0, 1, 0);
-    //gluLookAt(player_position.x, 5.0, player_position.y, player_position.x, -0.05, player_position.y, 0, 0, 1);
+
     glTranslatef(0.0, 0.0, -1.0);
     
     glutSwapBuffers();
@@ -289,20 +287,7 @@ void reshape(int w, int h) {
 }
 
 void keyboard(unsigned char key, int x, int y) {
-
     switch (key) {
-        case 'i':
-            player.move_up(0.01);
-            break;
-        case 'm':
-            player.move_down(0.01);
-            break;
-        case 'k':
-            player.move_right(0.01);
-            break;
-        case 'j':
-            player.move_left(0.01);
-            break;
         case 'c':
             if (mode == ALLPASS) mode = NORMAL;
             else mode = ALLPASS;
@@ -351,18 +336,8 @@ void idle_func() {
     enemy_bullets.move_bullets();
     enemy_list.move();
     item_list.move_items();
-    planet[4] += 0.5;
-    planet2[4] += 1;
-
-    /*if (plane_rotate == true)
-        plane[2] -= 0.2;
-    else
-        plane[2] += 0.2;
-
-    if (plane[2] > 120)
-        plane_rotate = true;
-    if (plane[2] < 100)
-        plane_rotate = false;*/
+    planet += 0.5;
+    planet2 += 1;
 
     check_hit();
     check_get_item();

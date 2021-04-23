@@ -15,7 +15,7 @@ public:
         hp = hp_;
         isRight = true;
         level = _level;
-        position.x = 0.5f;
+        position.x = 2.5f;
         position.y = 4.5f;
     };
     int getHP() { return hp; }
