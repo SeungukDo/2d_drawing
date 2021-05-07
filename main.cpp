@@ -36,12 +36,11 @@ extern GLuint shaderProgram;
 void camera_control();
 void proj_control(int w, int h);
 void isWire();
-void loadRect(glm::mat4 inn);
+void drawRect(glm::mat4 inn);
 
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
 }
-
 
 static void display()
 {
@@ -66,13 +65,10 @@ static void display()
     glm::mat4 inn = glm::mat4(1.f);
 
     camera_control();
-    loadRect(inn);
+    drawRect(inn);
 
     inn = glm::translate(inn, glm::vec3(0.f, 0.f, 1.f));
-    loadRect(inn);
-
-    
-
+    drawRect(inn);
 
     glutSwapBuffers();
 }
@@ -151,7 +147,6 @@ void timer_func(int a) {
     glutTimerFunc(1300, timer_func, 1);
 }
 
-
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -189,7 +184,7 @@ void proj_control(int w, int h) {
     glUniformMatrix4fv(pr_matrix_loc, 1, GL_FALSE, glm::value_ptr(pr));
 }
 
-void loadRect(glm::mat4 inn) {
+void drawRect(glm::mat4 inn) {
     GLint tr_matrix_loc = glGetUniformLocation(shaderProgram, "transform");
     glm::mat4 tran = glm::mat4(1.0f);
     tran = glm::translate(tran, glm::vec3(0.f, 0.f, 0.2f));
