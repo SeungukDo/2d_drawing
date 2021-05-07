@@ -110,8 +110,8 @@ void traverse(treenode* root) {
 	mvstack.push(model_view);
 	model_view = model_view * root->m;
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(static_cast<const float*>(glm::value_ptr(model_view)));
+	/*glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(static_cast<const float*>(glm::value_ptr(model_view)));*/
 
 	root->col();
 	root->f();
