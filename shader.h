@@ -31,19 +31,16 @@ static char* readShaderSource(const char* shaderFile) {
 }
 
 void CreateVertexBuffer() {
-    float vertices2[] = {
-     1.f,  1.f, 0.0f,  // 우측 상단
-     1.f, -1.f, 0.0f,  // 우측 하단
-    -1.f, -1.f, 0.0f,  // 좌측 하단
-    -1.f,  1.f, 0.0f,   // 좌측 상단
-    1.f,  1.f, 0.0f,  // 우측 상단
-     1.f, -1.f, 0.0f,  // 우측 하단
-    -1.f, -1.f, 0.0f,  // 좌측 하단
-    -1.f,  1.f, 0.0f   // 좌측 상단
-    };
-    unsigned int indices2[] = {  // 0부터 시작한다는 것을 명심하세요!
-    0, 1, 3,   // 첫 번째 삼각형
-    1, 2, 3    // 두 번째 삼각형
+    GLfloat vertices[] =
+    {
+        -1.f, 1.f, -1.f,    // 0
+        -1.f, 1.f, 1.f,     // 1
+        1.f, 1.f, -1.f,     // 2
+        1.f, 1.f, 1.f,      // 3
+        -1.f, -1.f, -1.f,   // 4
+        -1.f, -1.f, 1.f,    // 5
+        1.f, -1.f, -1.f,    // 6
+        1.f, -1.f, 1.f      // 7
     };
 
     GLuint indices[] = {  // note that we start from 0!
@@ -64,18 +61,6 @@ void CreateVertexBuffer() {
 
         2, 3, 6,
         3, 6, 7
-    };
-
-    GLfloat vertices[] =
-    {
-        -1.f, 1.f, -1.f,
-        -1.f, 1.f, 1.f,
-        1.f, 1.f, -1.f,
-        1.f, 1.f, 1.f,
-        -1.f, -1.f, -1.f,
-        -1.f, -1.f, 1.f, 
-        1.f, -1.f, -1.f,
-        1.f, -1.f, 1.f
     };
 
     glGenVertexArrays(1, &VAO);

@@ -36,7 +36,8 @@ extern GLuint shaderProgram;
 void camera_control();
 void proj_control(int w, int h);
 void isWire();
-void drawRect(glm::mat4 inn);
+void drawRect(glm::mat4 inn, glm::vec4 color);
+void determineColor(glm::vec4* player_color, glm::vec4* enemy_color);
 
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -48,27 +49,68 @@ static void display()
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shaderProgram);
 
-    GLfloat timetime = glutGet(GLUT_ELAPSED_TIME) / 100.f;
+    /*GLfloat timetime = glutGet(GLUT_ELAPSED_TIME) / 100.f;
     GLfloat greenValue = sin(timetime) / 2.f + 0.5f;
     GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
-    glUniform4f(vertexC, 0.0f, greenValue, 0.f, 1.f);
-
+    glUniform4f(vertexC, 0.0f, greenValue, 0.f, 1.f);*/
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     
-
     glBindVertexArray(VAO);
 
-    glm::mat4 inn = glm::mat4(1.f);
-
     camera_control();
-    drawRect(inn);
 
-    inn = glm::translate(inn, glm::vec3(0.f, 0.f, 1.f));
-    drawRect(inn);
+    Position player_position = player.get_position();
+    Position enemy_position = enemy_list.getEnemy().get_position();
+    std::vector <Position> player_bullet_positions;
+    std::vector <Position> enemy_bullet_positions;
+    std::vector<Position> item_positions;
+    glm::mat4 inn = glm::mat4(1.f);
+    glm::vec4 player_color = glm::vec4(1.f, 1.f, 1.f, 1.f);
+    glm::vec4 enemy_color = glm::vec4(1.f, 1.f, 1.f, 1.f);
+    int i;
+    determineColor(&player_color, &enemy_color);
+
+    // Draw Player
+    inn = glm::translate(inn, glm::vec3(player_position.x, 0.f, player_position.y));
+    drawRect(inn, player_color);
+
+    // Draw Enemy
+    inn = glm::translate(glm::mat4(1.f), glm::vec3(enemy_position.x, 0.f, enemy_position.y));
+    drawRect(inn, enemy_color);
+
+    // Player Bullet
+    player_bullet_positions = player_bullets.get_bullet_positions();
+    for (i = 0; i < player_bullet_positions.size(); i++) {
+        Position bullet_position = player_bullet_positions[i];
+
+        inn = glm::translate(glm::mat4(1.f), glm::vec3(bullet_position.x, 0.f, bullet_position.y));
+        inn = glm::scale(inn, glm::vec3(0.2f, 0.2f, 0.2f));
+        drawRect(inn, glm::vec4(1.f, 0.5f, 0.f, 1.f));
+    }
+
+    // Enemy Bullet
+    enemy_bullet_positions = enemy_bullets.get_bullet_positions();
+    for (i = 0; i < enemy_bullet_positions.size(); i++) {
+        Position bullet_position = enemy_bullet_positions[i];
+
+        inn = glm::translate(glm::mat4(1.f), glm::vec3(bullet_position.x, 0.f, bullet_position.y));
+        inn = glm::scale(inn, glm::vec3(0.2f, 0.2f, 0.2f));
+        drawRect(inn, glm::vec4(1.f, 0.5f, 1.f, 1.f));
+    }
+
+    // Item
+    item_positions = item_list.get_item_positions();
+    for (i = 0; i < item_positions.size(); i++) {
+        Position item_position = item_positions[i];
+        
+        inn = glm::translate(glm::mat4(1.f), glm::vec3(item_position.x, 0.f, item_position.y));
+        inn = glm::scale(inn, glm::vec3(0.2f, 0.2f, 0.2f));
+        drawRect(inn, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+    }
 
     glutSwapBuffers();
 }
@@ -171,9 +213,10 @@ int main(int argc, char** argv) {
 }
 
 void camera_control() {
+    Position player_position = player.get_position();
     GLint mv_matrix_loc = glGetUniformLocation(shaderProgram, "model_view");
     glm::mat4 mv = glm::mat4(1.f);
-    mv = glm::lookAt(glm::vec3(0.f, 0.7f, -0.2f), glm::vec3(0.0f, -0.05f, 1.f), glm::vec3(0.f, 1.f, 0.f));
+    mv = glm::lookAt(glm::vec3(player_position.x, 0.7f, player_position.y - 0.2f), glm::vec3(player_position.x, -0.05f, player_position.y + 1.f), glm::vec3(0.f, 1.f, 0.f));
     glUniformMatrix4fv(mv_matrix_loc, 1, GL_FALSE, glm::value_ptr(mv));
 }
 
@@ -184,17 +227,57 @@ void proj_control(int w, int h) {
     glUniformMatrix4fv(pr_matrix_loc, 1, GL_FALSE, glm::value_ptr(pr));
 }
 
-void drawRect(glm::mat4 inn) {
+void drawRect(glm::mat4 inn, glm::vec4 color) {
     GLint tr_matrix_loc = glGetUniformLocation(shaderProgram, "transform");
     glm::mat4 tran = glm::mat4(1.0f);
     tran = glm::translate(tran, glm::vec3(0.f, 0.f, 0.2f));
     tran = glm::scale(tran, glm::vec3(0.2f, 0.2f, 0.15f));
     tran = glm::rotate(tran, glm::radians(0.f), glm::vec3(0.f, 1.f, 0.f));
     tran = inn * tran;
-
     glUniformMatrix4fv(tr_matrix_loc, 1, GL_FALSE, glm::value_ptr(tran));
 
+    GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
+    glUniform4f(vertexC, color.x, color.y, color.z, 1.f);
+
     glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
+}
+
+void determineColor(glm::vec4* player_color, glm::vec4* enemy_color) {
+    switch (player.getHP()) {
+    case 3:
+        *player_color = glm::vec4(0.f, 1.f, 0.f, 1.f);
+        break;
+    case 2:
+        *player_color = glm::vec4(0.2f, 0.8f, 0.8f, 1.f);
+        break;
+    case 1:
+        *player_color = glm::vec4(0.f, 0.f, 1.f, 1.f);
+        break;
+    default:
+        *player_color = glm::vec4(0.f, 0.f, 0.f, 1.f);
+        break;
+    }
+
+    switch (enemy_list.getIndex()) {
+    case 0:
+        *enemy_color = glm::vec4(1.f, 1.f, 0.f, 1.f);
+        break;
+    case 1:
+        *enemy_color = glm::vec4(1.f, 0.5f, 0.f, 1.f);
+        break;
+    case 2:
+        *enemy_color = glm::vec4(1.f, 0.f, 0.f, 1.f);
+        break;
+    case 3:
+        *enemy_color = glm::vec4(0.8f, 0.2f, 0.8f, 1.f);
+        break;
+    case 4:
+        *enemy_color = glm::vec4(0.35f, 0.2f, 0.8f, 1.f);
+        break;
+    default:
+        *enemy_color = glm::vec4(0.f, 0.f, 0.f, 1.f);
+        break;
+    }
 }
 
 void isWire() {
