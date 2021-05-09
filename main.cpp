@@ -112,12 +112,23 @@ static void display()
         drawRect(inn, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
     }
 
+    GLint pr_matrix_loc = glGetUniformLocation(shaderProgram, "projection");
+    glm::mat4 pr = glm::mat4(1.f);
+
+    GLfloat h = glutGet(GLUT_WINDOW_HEIGHT);
+    GLfloat w = glutGet(GLUT_WINDOW_WIDTH);
+
+    pr = glm::frustum(-0.5, 0.5, -0.5 * h / w, 0.5 * h / w, 0.5, 7.0);
+    if (view == FPS) {
+        pr = glm::translate(pr, glm::vec3(0.f, 0.3f, 0.4f));
+    }
+    glUniformMatrix4fv(pr_matrix_loc, 1, GL_FALSE, glm::value_ptr(pr));
+
     glutSwapBuffers();
 }
 
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
-    proj_control(w, h);
 }
 
 void Init() {
@@ -218,13 +229,6 @@ void camera_control() {
     glm::mat4 mv = glm::mat4(1.f);
     mv = glm::lookAt(glm::vec3(player_position.x, 0.7f, player_position.y - 0.2f), glm::vec3(player_position.x, -0.05f, player_position.y + 1.f), glm::vec3(0.f, 1.f, 0.f));
     glUniformMatrix4fv(mv_matrix_loc, 1, GL_FALSE, glm::value_ptr(mv));
-}
-
-void proj_control(int w, int h) {
-    GLint pr_matrix_loc = glGetUniformLocation(shaderProgram, "projection");
-    glm::mat4 pr = glm::mat4(1.f);
-    pr = glm::frustum(-0.5, 0.5, -0.5 * (GLfloat)h / (GLfloat)w, 0.5 * (GLfloat)h / (GLfloat)w, 0.5, 7.0);
-    glUniformMatrix4fv(pr_matrix_loc, 1, GL_FALSE, glm::value_ptr(pr));
 }
 
 void drawRect(glm::mat4 inn, glm::vec4 color) {
