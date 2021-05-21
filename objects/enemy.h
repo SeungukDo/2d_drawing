@@ -15,8 +15,8 @@ public:
         hp = hp_;
         isRight = true;
         level = _level;
-        position.x = 0.5f;
-        position.y = 0.85f;
+        position.x = 2.5f;
+        position.y = 4.5f;
     };
     int getHP() { return hp; }
     bool decrease_hp() {
@@ -28,12 +28,12 @@ public:
     void increase_level() { level++; }
     void move(int idx) {
         if (idx == 0) {
-            if (position.x > 0.8) isRight = false;
-            else if (position.x < 0.2 - PLAYER_WIDTH) isRight = true;
+            if (position.x > 4.8) isRight = false;
+            else if (position.x < 0.2) isRight = true;
         }
 
-        if (isRight) move_right(0.001);
-        else move_left(0.001);
+        if (isRight) move_right(0.005);
+        else move_left(0.005);
     }
     void move_2(int idx) {
         std::random_device rd;
