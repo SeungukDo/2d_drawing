@@ -29,6 +29,7 @@ float planet = 0.0f;
 float planet2 = 0.0f;
 float light_angle = 0.f;
 float applied_light_angle = 0.f;
+glm::vec3 point_light = glm::vec3(0.f);
 
 Viewmode view = TPS;
 int over = 0;
@@ -107,15 +108,7 @@ static void display()
         drawGrid();
 
 
-        // Draw Planet
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, planet_buffer);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 
-        glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, planet_normal);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
-        Planett();
 
         // Draw Player
         glEnableVertexAttribArray(0);
@@ -142,14 +135,24 @@ static void display()
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
+        // Draw Planet
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, planet_buffer);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+
+        glEnableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, planet_normal);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+        Planett();
+
         // Player Bullet
         player_bullet_positions = player_bullets.get_bullet_positions();
         for (i = 0; i < player_bullet_positions.size(); i++) {
             Position bullet_position = player_bullet_positions[i];
 
             inn = glm::translate(glm::mat4(1.f), glm::vec3(bullet_position.x, 0.f, bullet_position.y));
-            inn = glm::scale(inn, glm::vec3(0.2f, 0.2f, 0.2f));
-            drawRect(inn, glm::vec4(1.f, 0.5f, 0.f, 1.f));
+            inn = glm::scale(inn, glm::vec3(0.01f, 0.01f, 0.01f));
+            drawPlanet(inn, glm::vec4(1.f, 0.5f, 0.f, 1.f));
         }
 
         // Enemy Bullet
@@ -158,8 +161,8 @@ static void display()
             Position bullet_position = enemy_bullet_positions[i];
 
             inn = glm::translate(glm::mat4(1.f), glm::vec3(bullet_position.x, 0.f, bullet_position.y));
-            inn = glm::scale(inn, glm::vec3(0.2f, 0.2f, 0.2f));
-            drawRect(inn, glm::vec4(1.f, 0.5f, 1.f, 1.f));
+            inn = glm::scale(inn, glm::vec3(0.01f, 0.01f, 0.01f));
+            drawPlanet(inn, glm::vec4(1.f, 0.5f, 1.f, 1.f));
         }
 
         // Item
@@ -168,8 +171,8 @@ static void display()
             Position item_position = item_positions[i];
 
             inn = glm::translate(glm::mat4(1.f), glm::vec3(item_position.x, 0.f, item_position.y));
-            inn = glm::scale(inn, glm::vec3(0.2f, 0.2f, 0.2f));
-            drawRect(inn, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+            inn = glm::scale(inn, glm::vec3(0.01f, 0.01f, 0.01f));
+            drawPlanet(inn, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
         }
 
         GLint pr_matrix_loc = glGetUniformLocation(shaderProgram, "projection");
@@ -184,12 +187,13 @@ static void display()
         }
         glUniformMatrix4fv(pr_matrix_loc, 1, GL_FALSE, glm::value_ptr(pr));
 
-        glm::vec4 light_vec = glm::vec4(2.5 - 7.5 * cos(applied_light_angle), abs(7.5 * sin(applied_light_angle)), 0.f, 1.f);
+        glm::vec4 light_vec = glm::vec4(2.5 - 7.5 * cos(applied_light_angle), abs(7.5 * sin(applied_light_angle)), 0.f, 0.f);
         bool inbool = (shading == GOURAUD);
         GLint amb_vec_loc = glGetUniformLocation(shaderProgram, "AmbientProduct");
         GLint dif_vec_loc = glGetUniformLocation(shaderProgram, "DiffuseProduct");
         GLint spec_vec_loc = glGetUniformLocation(shaderProgram, "SpecularProduct");
         GLint light_vec_loc = glGetUniformLocation(shaderProgram, "LightPosition");
+        GLint plight_vec_loc = glGetUniformLocation(shaderProgram, "PLightPosition");
         GLint shi_float_loc = glGetUniformLocation(shaderProgram, "Shininess");
         GLint gr_bool_loc = glGetUniformLocation(shaderProgram, "Gouraud");
 
@@ -197,7 +201,8 @@ static void display()
         glUniform4f(dif_vec_loc, 1.f, 1.f, 1.f, 1.f);
         glUniform4f(spec_vec_loc, 1.f, 1.f, 1.f, 1.f);
         glUniform4f(light_vec_loc, light_vec.x, light_vec.y, light_vec.z, light_vec.a);
-        glUniform1f(shi_float_loc, 0.5f);
+        glUniform4f(plight_vec_loc, point_light.x, point_light.y, point_light.z, 1.f);
+        glUniform1f(shi_float_loc, 50.f);
         glUniform1i(gr_bool_loc, inbool);
     }
     else if (over == 1) {
@@ -417,19 +422,19 @@ void drawEnemy(glm::mat4 inn, glm::vec4 color) {
 
 void Planett() {
     glm::mat4 inn = glm::mat4(1.f);
-    glm::mat4 gg = glm::translate(inn, glm::vec3(9.f, -2.f, 4.f));
+    glm::mat4 gg = glm::translate(inn, glm::vec3(2.5f, -1.2f, 2.5f));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.5, 0.5, 0.0, 1.0));
     gg = glm::rotate(gg, glm::radians(planet), glm::vec3(0.f, 1.f, 0.f));
     gg = glm::translate(gg, glm::vec3(3.f, 0.f, 3.f));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.5, 0.0, 0.0, 1.0));
-    gg = glm::rotate(gg, glm::radians(planet * 2), glm::vec3(1.f, 1.f, 0.f));
+    gg = glm::rotate(gg, glm::radians(planet * 2), glm::vec3(1.f, -1.f, 0.f));
     gg = glm::translate(gg, glm::vec3(3.f, 0.f, 3.f));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.0, 0.5, 0.0, 1.f));
 
-    gg = glm::translate(inn, glm::vec3(3.0, 1.2, 4.0));
+    /*gg = glm::translate(inn, glm::vec3(3.0, 1.2, 4.0));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.5, 0.5, 0.0, 1.0));
     gg = glm::rotate(gg, glm::radians(planet), glm::vec3(0.f, 1.f, 0.f));
@@ -437,9 +442,15 @@ void Planett() {
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.0, 0.8, 0.4, 1.0));
     gg = glm::rotate(gg, glm::radians(planet * 2), glm::vec3(1.f, 1.f, 0.f));
-    gg = glm::translate(gg, glm::vec3(3.f, 0.f, 3.f));
+    gg = glm::translate(gg, glm::vec3(20.f, 0.f, 20.f));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
-    drawPlanet(gg, glm::vec4(0.5, 0.5, 0.5, 1.f));
+    drawPlanet(gg, glm::vec4(0.5, 0.5, 0.5, 1.f));*/
+
+    glm::vec4 aa = glm::vec4(0.f, 0.f, 0.f, 1.f);
+    aa = gg * aa;
+    point_light = glm::vec3(aa.x, aa.y, aa.z);
+
+    std::cout << point_light.x << " + " << point_light.y << " + " << point_light.z << std::endl;
 }
 
 void drawPlanet(glm::mat4 inn, glm::vec4 color) {

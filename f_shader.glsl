@@ -5,6 +5,7 @@ in vec4 color;
 in vec3 fN;
 in vec3 fE;
 in vec3 fL;
+in vec3 pfL;
 
 uniform vec4 AmbientProduct;
 uniform vec4 DiffuseProduct;
@@ -23,18 +24,31 @@ void main()
 		vec3 L = normalize(fL);
 
 		vec3 H = normalize(L + E);
+
 		vec4 ambient = AmbientProduct;
-		float Kd = max(dot(L, N), 0.0);
-		vec4 diffuse = Kd * DiffuseProduct;
+        float Kd = max(dot(L, N), 0.0);
+        vec4 diffuse = Kd * DiffuseProduct;
+        float Ks = pow(max(dot(N, H), 0.0), Shininess);
+        vec4 specular = Ks * SpecularProduct;
+        if(dot(L, N) < 0.0) specular = vec4(0.0, 0.0, 0.0, 1.0);
 
-		float Ks = pow(max(dot(N, H), 0.0), Shininess);
-		vec4 specular = Ks * SpecularProduct;
 
-		if(dot(L, N) < 0.0)
-			specular = vec4(0.0, 0.0, 0.0, 1.0);
-		FragColor = ambient + diffuse + specular;
-		FragColor.a = 1.0;
-		FragColor = ourColor * FragColor;
+		vec3 pN = normalize(fN);
+		vec3 pE = normalize(fE);
+		vec3 pL = normalize(pfL);
+
+		vec3 pH = normalize(pL + pE); 
+
+		vec4 pambient = AmbientProduct;
+		float pKd = max(dot(pL, pN), 0.0);
+		vec4 pdiffuse = pKd * DiffuseProduct;
+		float pKs = pow(max(dot(pN, pH), 0.0), Shininess);
+		vec4 pspecular = pKs * SpecularProduct;
+		if(dot(pL, pN) < 0.0) pspecular = vec4(0.0, 0.0, 0.0, 1.0);
+
+		vec4 Pcolor = (ambient + diffuse + specular + pambient + pdiffuse + pspecular) * 0.5;
+		Pcolor.a = 1.0;
+		FragColor = ourColor * Pcolor;
 	}
 	else
 		FragColor = color * ourColor;
