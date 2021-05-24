@@ -107,9 +107,6 @@ static void display()
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
         drawGrid();
 
-
-
-
         // Draw Player
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, plane_buffer);
@@ -118,6 +115,10 @@ static void display()
         glEnableVertexAttribArray(1);
         glBindBuffer(GL_ARRAY_BUFFER, plane_normal);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, plane_uv);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
         drawPlayer(ModelMatrix_player, player_color);
 
         // Draw Enemy
@@ -126,8 +127,13 @@ static void display()
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 
         glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, plane_normal);
+        glBindBuffer(GL_ARRAY_BUFFER, plane_normal2);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, plane_uv2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
+        drawPlayer(ModelMatrix_player, player_color);
         drawEnemy(ModelMatrix_enemy, enemy_color);
 
         glEnableVertexAttribArray(0);
@@ -143,6 +149,10 @@ static void display()
         glEnableVertexAttribArray(1);
         glBindBuffer(GL_ARRAY_BUFFER, planet_normal);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, planet_uv);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
         Planett();
 
         // Player Bullet
@@ -151,7 +161,7 @@ static void display()
             Position bullet_position = player_bullet_positions[i];
 
             inn = glm::translate(glm::mat4(1.f), glm::vec3(bullet_position.x, 0.f, bullet_position.y));
-            inn = glm::scale(inn, glm::vec3(0.01f, 0.01f, 0.01f));
+            inn = glm::scale(inn, glm::vec3(0.015f, 0.015f, 0.015f));
             drawPlanet(inn, glm::vec4(1.f, 0.5f, 0.f, 1.f));
         }
 
@@ -161,7 +171,7 @@ static void display()
             Position bullet_position = enemy_bullet_positions[i];
 
             inn = glm::translate(glm::mat4(1.f), glm::vec3(bullet_position.x, 0.f, bullet_position.y));
-            inn = glm::scale(inn, glm::vec3(0.01f, 0.01f, 0.01f));
+            inn = glm::scale(inn, glm::vec3(0.015f, 0.015f, 0.015f));
             drawPlanet(inn, glm::vec4(1.f, 0.5f, 1.f, 1.f));
         }
 
@@ -171,7 +181,7 @@ static void display()
             Position item_position = item_positions[i];
 
             inn = glm::translate(glm::mat4(1.f), glm::vec3(item_position.x, 0.f, item_position.y));
-            inn = glm::scale(inn, glm::vec3(0.01f, 0.01f, 0.01f));
+            inn = glm::scale(inn, glm::vec3(0.015f, 0.015f, 0.015f));
             drawPlanet(inn, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
         }
 
@@ -336,7 +346,7 @@ int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(0, 0);
-    glutInitWindowSize(500, 500);
+    glutInitWindowSize(700, 900);
     glutCreateWindow(argv[0]);
     Init();
     glewInit();
@@ -423,14 +433,14 @@ void drawEnemy(glm::mat4 inn, glm::vec4 color) {
 void Planett() {
     glm::mat4 inn = glm::mat4(1.f);
     glm::mat4 gg = glm::translate(inn, glm::vec3(2.5f, -1.2f, 2.5f));
-    gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
+    gg = glm::scale(gg, glm::vec3(0.5f, 0.5f, 0.5f));
     drawPlanet(gg, glm::vec4(0.5, 0.5, 0.0, 1.0));
     gg = glm::rotate(gg, glm::radians(planet), glm::vec3(0.f, 1.f, 0.f));
-    gg = glm::translate(gg, glm::vec3(3.f, 0.f, 3.f));
+    gg = glm::translate(gg, glm::vec3(2.f, 0.f, 2.f));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.5, 0.0, 0.0, 1.0));
     gg = glm::rotate(gg, glm::radians(planet * 2), glm::vec3(1.f, -1.f, 0.f));
-    gg = glm::translate(gg, glm::vec3(3.f, 0.f, 3.f));
+    gg = glm::translate(gg, glm::vec3(2.f, 0.f, 2.f));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.0, 0.5, 0.0, 1.f));
 
@@ -449,8 +459,6 @@ void Planett() {
     glm::vec4 aa = glm::vec4(0.f, 0.f, 0.f, 1.f);
     aa = gg * aa;
     point_light = glm::vec3(aa.x, aa.y, aa.z);
-
-    std::cout << point_light.x << " + " << point_light.y << " + " << point_light.z << std::endl;
 }
 
 void drawPlanet(glm::mat4 inn, glm::vec4 color) {
