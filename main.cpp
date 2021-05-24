@@ -44,6 +44,7 @@ extern GLuint planet_buffer;
 extern GLuint shaderProgram;
 extern GLuint WIN;
 extern GLuint LOSE;
+GLuint Texture;
 
 std::vector<glm::vec3> vertices_player;
 std::vector<glm::vec2> uvs_player;
@@ -70,6 +71,7 @@ void drawGrid();
 void Planett();
 void drawPlanet(glm::mat4 inn, glm::vec4 color);
 void determineColor(glm::vec4* player_color, glm::vec4* enemy_color);
+void InitTexture();
 
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -100,6 +102,8 @@ static void display()
         glm::mat4 ModelMatrix_enemy = glm::translate(inn, glm::vec3(enemy_position.x, 0.0f, enemy_position.y)) * glm::scale(inn, glm::vec3(0.03f, 0.03f, 0.03f));
 
         determineColor(&player_color, &enemy_color);
+        
+        glBindTexture(GL_TEXTURE_2D, Texture);
 
         // Draw Grid
         glEnableVertexAttribArray(0);
@@ -387,6 +391,9 @@ void drawGrid() {
     GLint tr_matrix_loc = glGetUniformLocation(shaderProgram, "transform");
     GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
     glUniform4f(vertexC, 0.f, 0.f, 0.f, 1.f);
+    
+    GLint use_texture_loc = glGetUniformLocation(shaderProgram, "useTexture");
+    glUniform1i(use_texture_loc, false);
 
     glUniformMatrix4fv(tr_matrix_loc, 1, GL_FALSE, glm::value_ptr(inn));
     glDrawArrays(GL_LINES, 0, vertices_grid.size());
@@ -404,6 +411,9 @@ void drawRect(glm::mat4 inn, glm::vec4 color) {
 
     GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
     glUniform4f(vertexC, color.x, color.y, color.z, 1.f);
+    
+    GLint use_texture_loc = glGetUniformLocation(shaderProgram, "useTexture");
+    glUniform1i(use_texture_loc, false);
 
     glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 0);
 }
@@ -415,6 +425,9 @@ void drawPlayer(glm::mat4 inn, glm::vec4 color) {
 
     GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
     glUniform4f(vertexC, color.x, color.y, color.z, 1.f);
+    
+    GLint use_texture_loc = glGetUniformLocation(shaderProgram, "useTexture");
+    glUniform1i(use_texture_loc, true);
 
     glDrawArrays(GL_TRIANGLES, 0, vertices_player.size());
 }
@@ -426,6 +439,9 @@ void drawEnemy(glm::mat4 inn, glm::vec4 color) {
 
     GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
     glUniform4f(vertexC, color.x, color.y, color.z, 1.f);
+    
+    GLint use_texture_loc = glGetUniformLocation(shaderProgram, "useTexture");
+    glUniform1i(use_texture_loc, true);
 
     glDrawArrays(GL_TRIANGLES, 0, vertices_enemy.size());
 }
@@ -468,6 +484,9 @@ void drawPlanet(glm::mat4 inn, glm::vec4 color) {
 
     GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
     glUniform4f(vertexC, color.x, color.y, color.z, 1.f);
+    
+    GLint use_texture_loc = glGetUniformLocation(shaderProgram, "useTexture");
+    glUniform1i(use_texture_loc, false);
 
     glDrawArrays(GL_TRIANGLES, 0, vertices_planet.size());
 }
@@ -517,4 +536,27 @@ void isWire() {
     else {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
+}
+
+void InitTexture() {
+    glGenTextures(1, &Texture);
+    glBindTexture(GL_TEXTURE_2D, Texture);
+// 텍스처 wrapping/filtering 옵션 설정(현재 바인딩된 텍스처 객체에 대해)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// 텍스처 로드 및 생성
+    int width, height, nrChannels;
+    unsigned char *data = stbi_load("Diffuse.jpg", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
 }
